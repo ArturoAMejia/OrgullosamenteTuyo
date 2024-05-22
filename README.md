@@ -1,40 +1,46 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# VerdIES
 
-## Getting Started
+## Para poder arrancar el proyecto se debe de realizar los siguientes comandos
 
-First, run the development server:
+Para instalar las dependecias ejecutar el comando
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```node
+npm i
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Una vez instaladas las dependencias, crear un archivo .env para ingresar las claves secretas y sustituir los valores
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+``` env
+AUTH_SECRET=
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+FACEBOOK_CLIENT_ID=
+FACEBOOK_CLIENT_SECRET=
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=
 
-## Learn More
+DATABASE_URL="postgresql://user:password@localhost:5432/taller-arte-xolotl?schema=public"NEXTAUTH_SECRET=
+```
 
-To learn more about Next.js, take a look at the following resources:
+Para realizar todas las migraciones, se debe de ejecutar el siguiente comando:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```node
+npx prisma migrate dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Para realizar un seed y llenar ciertos datos en la base de datos para realizar pruebas se debe de ejecutar el comando:
 
-## Deploy on Vercel
+```node
+npx prisma db seed
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Una vez ejecutado todos los comandos con éxito, realizar el comando:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```node
+npm run dev
+```
+
+Para ejecutar el servidor de desarrollo
