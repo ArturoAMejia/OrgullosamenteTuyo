@@ -55,3 +55,17 @@ export const useEditUser = () => {
     },
   });
 };
+
+const asignTeam = async (userId: string, teamId?: string) => {
+  const { data } = await api.post("/team/asign", { userId, teamId });
+  return data;
+};
+
+export const useAsignTeam = () => {
+  const { refetch } = useGetUsers();
+  refetch();
+  return useMutation({
+    mutationFn: (data: { userId: string; teamId?: string }) =>
+      asignTeam(data.userId, data?.teamId),
+  });
+};

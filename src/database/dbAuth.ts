@@ -44,6 +44,7 @@ export const checkUserEmailPassword = async (
   username: string,
   password: string
 ) => {
+  console.log(username, password)
   await prisma.$connect();
 
   const u = await prisma.user.findFirst({
@@ -63,6 +64,7 @@ export const checkUserEmailPassword = async (
   if (!bcrypt.compareSync(password, u.password || "")) {
     return null;
   }
+  console.log(bcrypt.compareSync(password, u.password || ""))
 
   const { image, name, id } = u;
 

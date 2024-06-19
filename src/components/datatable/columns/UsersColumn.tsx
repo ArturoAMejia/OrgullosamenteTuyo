@@ -1,11 +1,16 @@
+import { AsignTeam } from "@/components/admin/team/AsignTeam";
 import { EditTeam } from "@/components/admin/team/EditTeam";
-import { Team, User } from "@prisma/client";
+import { EditUser } from "@/components/admin/user/EditUser";
+import { Badge } from "@/components/ui/badge";
+import { TeamDetail, User } from "@prisma/client";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 
 // export interface IPainter extends painter {
 //   person: person;
 // }
-export interface IUser extends User {}
+export interface IUser extends User {
+  TeamDetail?: TeamDetail;
+}
 
 const columnHelper = createColumnHelper<IUser>();
 
@@ -26,14 +31,21 @@ export const usersColumns: ColumnDef<IUser>[] = [
     header: "Usario",
     cell: (info) => info.getValue(),
   }),
+  columnHelper.accessor<"TeamDetail", TeamDetail>("TeamDetail", {
+    header: "Equipo Asignado",
+    cell: (info) =>
+      info.getValue()[0]?.team !== undefined ? (
+        <Badge variant="outline">{info.getValue()[0]?.team?.name}</Badge>
+      ) : (
+        <AsignTeam user={info.row.original} />
+      ),
+  }),
   columnHelper.display({
     id: "actions",
     header: "Acciones",
     cell: (info) => (
       <div className="flex justify-center">
-        {/* <EditTeam team={info.row.original} />
-         */}
-         acciones
+        <EditUser user={info.row.original} />
       </div>
     ),
   }),

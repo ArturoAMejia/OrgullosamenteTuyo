@@ -1,6 +1,7 @@
 import { prisma } from "@/database";
 import { sendResetPasswordEmail } from "@/util/resetPassword";
 import type { NextApiRequest, NextApiResponse } from "next";
+import bcrypt from "bcryptjs";
 
 type Data = {
   message: string;
@@ -87,7 +88,7 @@ const resetPassword = async (req: NextApiRequest, res: NextApiResponse) => {
       id: user.id,
     },
     data: {
-      password,
+      password: bcrypt.hashSync(password),
     },
   });
 

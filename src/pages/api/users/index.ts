@@ -1,3 +1,4 @@
+import { IUser } from "@/components/datatable/columns/UsersColumn";
 import { prisma } from "@/database";
 import { User } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -7,7 +8,8 @@ type Data =
       message: string;
     }
   | User
-  | User[];
+  | IUser[]
+  | any;
 
 export default function handler(
   req: NextApiRequest,
@@ -34,7 +36,24 @@ export default function handler(
 const getUsers = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   await prisma.$connect();
 
-  const users = await prisma.user.findMany();
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      username: true,
+      TeamDetail: {
+        select: {
+          team: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+      password: true,
+    },
+  });
 
   await prisma.$disconnect();
 

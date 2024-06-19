@@ -7,11 +7,11 @@ import React from "react";
 
 const ColaboradoresPage = () => {
   const { data, isLoading } = useGetUsers();
+  console.log(data);
   return (
     <AdminLayout title="Colaboradores">
       <div className="flex justify-end">
-        
-      <CreateUser />
+        <CreateUser />
       </div>
       {isLoading ? (
         <p>Cargando...</p>
@@ -23,3 +23,4 @@ const ColaboradoresPage = () => {
 };
 
 export default ColaboradoresPage;
+
