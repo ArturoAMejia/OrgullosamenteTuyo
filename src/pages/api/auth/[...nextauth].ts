@@ -13,12 +13,12 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Username", type: "text" } as any,
+        username: { label: "Username", type: "text" } as any,
         password: { label: "Password", type: "password" } as any,
       },
-      async authorize({ email, password }) {
+      async authorize({ username, password }) {
         // console.log({ email, password });
-        return await checkUserEmailPassword(email, password);
+        return await checkUserEmailPassword(username, password);
       },
     }),
     GoogleProvider({

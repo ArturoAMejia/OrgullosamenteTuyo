@@ -1,8 +1,6 @@
-
 import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import { prisma } from "../../../../database";
-
 
 type Data = {
   message: string;
@@ -23,7 +21,7 @@ export default function handler(
 const register = async (req: NextApiRequest, res: NextApiResponse) => {
   await prisma.$connect();
 
-  const { first_name, lastname, email, password } = req.body;
+  const { first_name, lastname, email, password = "12345678" } = req.body;
 
   const e = await prisma.user.findFirst({
     where: {
@@ -37,6 +35,7 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
     data: {
       name: first_name + " " + lastname,
       email,
+      username: first_name.toLowerCase() + lastname.toLowerCase(),
       password: bcrypt.hashSync(password),
     },
   });

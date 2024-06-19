@@ -5,12 +5,12 @@ export const oAuthUser = async (user: any, account: any, token: any) => {
   await prisma.$connect();
 
   const u = await prisma.user.findUnique({
-    where: { email: user.email },
+    where: { username: user.username },
     select: {
       id: true,
       name: true,
       image: true,
-      email: true,
+      username: true,
     },
   });
 
@@ -41,15 +41,14 @@ export const oAuthUser = async (user: any, account: any, token: any) => {
 };
 
 export const checkUserEmailPassword = async (
-  email: string,
+  username: string,
   password: string
 ) => {
-  console.log(email);
   await prisma.$connect();
 
   const u = await prisma.user.findFirst({
     where: {
-      email,
+      username,
     },
   });
 
@@ -71,6 +70,6 @@ export const checkUserEmailPassword = async (
     image,
     name,
     id,
-    email,
+    username,
   };
 };

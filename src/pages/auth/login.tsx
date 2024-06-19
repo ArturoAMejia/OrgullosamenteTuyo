@@ -1,12 +1,43 @@
 import Image from "next/image";
 import Link from "next/link";
-
+import * as z from "zod";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { AuthProviders } from "@/components/ui/AuthProviders";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+
+const loginSchema = z.object({
+  username: z.string(),
+  password: z
+    .string()
+    .min(8, { message: "La contraseña debe tener al menos 8 caracteres" }),
+});
+
+type FormData = z.infer<typeof loginSchema>;
 
 const Login = () => {
+  const form = useForm<FormData>({
+    resolver: zodResolver(loginSchema),
+    mode: "onChange",
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
+
+  const onLoginUser = async ({ username, password }: FormData) => {
+    await signIn("credentials", { username, password, callbackUrl: "/" });
+  };
+
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
@@ -14,43 +45,48 @@ const Login = () => {
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">Iniciar Sesión</h1>
             <p className="text-balance text-muted-foreground">
-              Ingresa tu email para iniciar sesión
+              Ingresa tu usuario para iniciar sesión
             </p>
           </div>
-          <div className="grid gap-2">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Contraseña</Label>
-                <Link
-                  href="/forgot-password"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  Forgot your password?
-                </Link>
+          <Form {...form}>
+            <form
+              className="grid gap-2"
+              onSubmit={form.handleSubmit(onLoginUser)}
+            >
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem className="my-2">
+                      <FormLabel>Usuario</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Contraseña</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="password" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-              <Input id="password" type="password" required />
-            </div>
-            <Button type="submit" className="w-full">
-              Login
-            </Button>
 
-            <AuthProviders register={false} />
-          </div>
-          <div className="mt-4 text-center text-sm">
-            ¿No tienes cuenta?{" "}
-            <Link href="/auth/register" className="underline">
-              Regístrate
-            </Link>
-          </div>
+              <Button type="submit" className="w-full">
+                Login
+              </Button>
+            </form>
+          </Form>
         </div>
       </div>
       <div className="hidden bg-muted lg:block">

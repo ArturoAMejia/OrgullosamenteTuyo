@@ -12,13 +12,6 @@ Una vez instaladas las dependencias, crear un archivo .env para ingresar las cla
 
 ``` env
 AUTH_SECRET=
-
-FACEBOOK_CLIENT_ID=
-FACEBOOK_CLIENT_SECRET=
-
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-
 NEXTAUTH_SECRET=
 NEXTAUTH_URL=
 

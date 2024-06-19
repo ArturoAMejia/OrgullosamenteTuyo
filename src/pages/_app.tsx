@@ -10,8 +10,7 @@ import {
 } from "@tanstack/react-query";
 
 import { Session } from "next-auth";
-
-const queryClient = new QueryClient();
+import { queryClient } from "@/util/queryClient";
 
 function MyApp({
   Component,
