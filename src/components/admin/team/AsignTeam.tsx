@@ -73,7 +73,7 @@ export const AsignTeam: FC<Props> = ({ user }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="default">Asignar</Button>
+        <Button variant="outline">Asignar</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

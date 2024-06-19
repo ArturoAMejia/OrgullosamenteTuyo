@@ -1,11 +1,18 @@
 import { EditTeam } from "@/components/admin/team/EditTeam";
-import { Team } from "@prisma/client";
+import { TeamDetails } from "@/components/admin/team/TeamDetails";
+import { Team, TeamDetail, User } from "@prisma/client";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 
 // export interface IPainter extends painter {
 //   person: person;
+
 // }
-export interface ITeam extends Team {}
+interface ITeamDetail extends TeamDetail {
+  user?: User;
+}
+export interface ITeam extends Team {
+  TeamDetail?: ITeamDetail[];
+}
 
 const columnHelper = createColumnHelper<ITeam>();
 
@@ -28,6 +35,15 @@ export const teamColumns: ColumnDef<ITeam>[] = [
     cell: (info) => (
       <div className="flex justify-center">
         <EditTeam team={info.row.original} />
+      </div>
+    ),
+  }),
+  columnHelper.display({
+    id: "members",
+    header: "Detalle",
+    cell: (info) => (
+      <div className="flex justify-center">
+        <TeamDetails team={info.row.original} />
       </div>
     ),
   }),

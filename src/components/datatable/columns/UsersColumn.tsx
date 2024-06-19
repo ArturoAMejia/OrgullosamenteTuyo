@@ -1,13 +1,9 @@
 import { AsignTeam } from "@/components/admin/team/AsignTeam";
-import { EditTeam } from "@/components/admin/team/EditTeam";
 import { EditUser } from "@/components/admin/user/EditUser";
 import { Badge } from "@/components/ui/badge";
 import { TeamDetail, User } from "@prisma/client";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 
-// export interface IPainter extends painter {
-//   person: person;
-// }
 export interface IUser extends User {
   TeamDetail?: TeamDetail;
 }

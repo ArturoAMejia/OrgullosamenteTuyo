@@ -50,6 +50,14 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
             <div className="flex-1">
               <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
                 <Link
+                  href="/puntuacion"
+                  className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
+                  prefetch={false}
+                >
+                  <TrophyIcon className="h-4 w-4" />
+                  Tabla de puntuación
+                </Link>
+                <Link
                   href="/equipos"
                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                   prefetch={false}
@@ -65,14 +73,7 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                   <MapPinIcon className="h-4 w-4" />
                   Estaciones
                 </Link>
-                <Link
-                  href="/puntuacion"
-                  className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
-                  prefetch={false}
-                >
-                  <TrophyIcon className="h-4 w-4" />
-                  Tabla de puntuación
-                </Link>
+
                 <Link
                   href="/colaboradores"
                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
@@ -99,33 +100,17 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="flex flex-col">
+                <Link
+                  href="/"
+                  className="flex items-center gap-2 text-lg font-semibold"
+                  prefetch={false}
+                >
+                  <Package2Icon className="h-6 w-6" />
+                  <span>Orgullosamente Tuyo</span>
+                </Link>
                 <nav className="grid gap-2 text-lg font-medium">
                   <Link
-                    href="#"
-                    className="flex items-center gap-2 text-lg font-semibold"
-                    prefetch={false}
-                  >
-                    <Package2Icon className="h-6 w-6" />
-                    <span className="sr-only">Orgullosamente Tuyo</span>
-                  </Link>
-                  <Link
-                    href="#"
-                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                    prefetch={false}
-                  >
-                    <UsersIcon className="h-5 w-5" />
-                    Equipos
-                  </Link>
-                  <Link
-                    href="#"
-                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                    prefetch={false}
-                  >
-                    <MapPinIcon className="h-5 w-5" />
-                    Estaciones
-                  </Link>
-                  <Link
-                    href="#"
+                    href="/puntuacion"
                     className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
                     prefetch={false}
                   >
@@ -133,7 +118,23 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                     Tabla de puntuación
                   </Link>
                   <Link
-                    href="#"
+                    href="/equipos"
+                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                    prefetch={false}
+                  >
+                    <UsersIcon className="h-5 w-5" />
+                    Equipos
+                  </Link>
+                  <Link
+                    href="/estaciones"
+                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                    prefetch={false}
+                  >
+                    <MapPinIcon className="h-5 w-5" />
+                    Estaciones
+                  </Link>
+                  <Link
+                    href="/colaboradores"
                     className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                     prefetch={false}
                   >

@@ -31,6 +31,21 @@ const getTeams = async (req: NextApiRequest, res: NextApiResponse) => {
   await prisma.$connect();
 
   const teams = await prisma.team.findMany({
+    select: {
+      id: true,
+      name: true,
+      points: true,
+      TeamDetail: {
+        select: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
     orderBy: {
       id: "asc",
     },

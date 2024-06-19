@@ -1,30 +1,20 @@
 import { AdminLayout } from "@/components/admin/AdminLayout";
-import { CreateTeam } from "@/components/admin/team/CreateTeam";
-import { teamColumns } from "@/components/datatable/columns/TeamColumn";
-import { DataTable } from "@/components/datatable/Datatable";
-
-import { AuthProviders } from "@/components/ui/AuthProviders";
-import { Button } from "@/components/ui/button";
-import { useGetTeams } from "@/hooks";
-import { getSession, signOut, useSession } from "next-auth/react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Home() {
-  const { data: session } = useSession();
-  console.log({ session });
-
-  const { data, isLoading } = useGetTeams();
-
   return (
     <AdminLayout title="Prueba">
-      <div className="flex justify-end">
-        <CreateTeam />
+      <div className="flex justify-center">
+        <Tabs defaultValue="scoreboard" className="w-full">
+          <TabsList>
+            <TabsTrigger value="scoreboard">Tabla de puntajes</TabsTrigger>
+            <TabsTrigger value="form">Formulario de inspección</TabsTrigger>
+            <TabsTrigger value="qa">Cuestionario</TabsTrigger>
+          </TabsList>
+          <TabsContent value="scoreboard">TODO: Tabla de puntakes</TabsContent>
+          <TabsContent value="form">TODO: Formulario de inspección</TabsContent>
+        </Tabs>
       </div>
-
-      {isLoading ? (
-        <p>cargando...</p>
-      ) : (
-        <DataTable columns={teamColumns} data={data} />
-      )}
     </AdminLayout>
   );
 }

@@ -60,7 +60,7 @@ export const EditTeam: FC<Props> = ({ team }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Editar Equipo</Button>
+        <Button variant="outline">Editar</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
