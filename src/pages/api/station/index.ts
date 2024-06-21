@@ -37,7 +37,7 @@ const createStation = async (
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) => {
-  const { name, teamId } = req.body;
+  const { name, userId } = req.body;
 
   await prisma.$connect();
 
@@ -55,7 +55,7 @@ const createStation = async (
   const station = await prisma.station.create({
     data: {
       name,
-      teamId,
+      userId,
     },
   });
 

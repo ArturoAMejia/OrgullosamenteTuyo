@@ -21,7 +21,13 @@ export default function handler(
 const register = async (req: NextApiRequest, res: NextApiResponse) => {
   await prisma.$connect();
 
-  const { first_name, lastname, email, password = "12345678" } = req.body;
+  const {
+    first_name,
+    lastname,
+    email,
+    password = "12345678",
+    managementId,
+  } = req.body;
 
   const e = await prisma.user.findFirst({
     where: {
@@ -37,6 +43,7 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
       email,
       username: first_name.toLowerCase() + lastname.toLowerCase(),
       password: bcrypt.hashSync(password),
+      managementId,
     },
   });
 
