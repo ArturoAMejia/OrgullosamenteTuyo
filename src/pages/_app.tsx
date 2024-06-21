@@ -1,16 +1,17 @@
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Lato } from "next/font/google";
 
 import { Session } from "next-auth";
 import { queryClient } from "@/util/queryClient";
+
+const lato = Lato({
+  subsets: ["latin"],
+  weight: ["100", "400", "700", "900"],
+  variable: "--font-lato",
+});
 
 function MyApp({
   Component,
@@ -19,7 +20,9 @@ function MyApp({
   return (
     <SessionProvider session={session}>
       <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
+        <main className={`${lato.variable} font-sans`}>
+          <Component {...pageProps} />
+        </main>
       </QueryClientProvider>
     </SessionProvider>
   );

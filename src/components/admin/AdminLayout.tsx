@@ -14,6 +14,7 @@ import {
   CircleUserIcon,
   MapPinIcon,
   MenuIcon,
+  MountainIcon,
   Package2Icon,
   TrophyIcon,
   UsersIcon,
@@ -21,6 +22,7 @@ import {
 import { FC } from "react";
 import { Toaster } from "react-hot-toast";
 import Head from "next/head";
+import Image from "next/image";
 
 interface Props {
   title: string;
@@ -35,23 +37,25 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
       </Head>
 
       <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-        <div className="hidden border-r bg-muted/40 md:block">
+        <div className="hidden  md:block bg-[#046A38] text-black">
           <div className="flex h-full max-h-screen flex-col gap-2">
-            <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+            <div className="flex h-14 items-center  px-4 lg:h-[60px] lg:px-6 bg-[#046A38] text-black">
               <Link
                 href="#"
                 className="flex items-center gap-2 font-semibold"
                 prefetch={false}
               >
                 <Package2Icon className="h-6 w-6" />
-                <span className="">Orgullosamente Tuyo</span>
+                <span className="text-white font-bold">
+                  Embajadores Ambientales
+                </span>
               </Link>
             </div>
             <div className="flex-1">
-              <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+              <nav className="grid items-start px-2 text-sm font-medium lg:px-4 bg-[#046A38]">
                 <Link
                   href="/puntuacion"
-                  className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
+                  className="flex items-center text-white font-bold gap-3 rounded-lg bg-[#00B5EB] px-3 py-2  transition-all "
                   prefetch={false}
                 >
                   <TrophyIcon className="h-4 w-4" />
@@ -59,7 +63,7 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                 </Link>
                 <Link
                   href="/equipos"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                  className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
                   prefetch={false}
                 >
                   <UsersIcon className="h-4 w-4" />
@@ -67,7 +71,7 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                 </Link>
                 <Link
                   href="/estaciones"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                  className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
                   prefetch={false}
                 >
                   <MapPinIcon className="h-4 w-4" />
@@ -76,7 +80,7 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
 
                 <Link
                   href="/colaboradores"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                  className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
                   prefetch={false}
                 >
                   <UsersIcon className="h-4 w-4" />
@@ -87,7 +91,7 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
           </div>
         </div>
         <div className="flex flex-col">
-          <header className="flex h-14 justify-end items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+          <header className="flex h-24 justify-end items-center gap-4   px-4 lg:h-[60px] lg:px-6 bg-[#046A38]">
             <Sheet>
               <SheetTrigger asChild>
                 <Button
@@ -99,19 +103,19 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                   <span className="sr-only">Toggle navigation menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="flex flex-col">
+              <SheetContent side="left" className="flex flex-col font-sans">
                 <Link
                   href="/"
-                  className="flex items-center gap-2 text-lg font-semibold"
+                  className="flex items-center gap-2 text-lg font-bold"
                   prefetch={false}
                 >
                   <Package2Icon className="h-6 w-6" />
-                  <span>Orgullosamente Tuyo</span>
+                  <span>Embajadores Ambientales</span>
                 </Link>
-                <nav className="grid gap-2 text-lg font-medium">
+                <nav className="grid gap-2 text-lg font-bold">
                   <Link
                     href="/puntuacion"
-                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
+                    className="mx-[-0.65rem] flex font-bold items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
                     prefetch={false}
                   >
                     <TrophyIcon className="h-5 w-5" />
@@ -119,7 +123,7 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                   </Link>
                   <Link
                     href="/equipos"
-                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                    className="mx-[-0.65rem] flex font-bold items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground"
                     prefetch={false}
                   >
                     <UsersIcon className="h-5 w-5" />
@@ -127,7 +131,7 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                   </Link>
                   <Link
                     href="/estaciones"
-                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                    className="mx-[-0.65rem] flex font-bold items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground"
                     prefetch={false}
                   >
                     <MapPinIcon className="h-5 w-5" />
@@ -135,7 +139,7 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                   </Link>
                   <Link
                     href="/colaboradores"
-                    className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                    className="mx-[-0.65rem] flex font-bold items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground"
                     prefetch={false}
                   >
                     <UsersIcon className="h-5 w-5" />
@@ -166,10 +170,26 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
               </DropdownMenuContent>
             </DropdownMenu>
           </header>
-          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 bg-[url('/img/paper-pattern.png')]">
             {children}
             <Toaster position="top-right" reverseOrder={false} />
           </main>
+          <footer className="bg-[#64A70B] py-8 w-full">
+            <div className="container flex items-center justify-center gap-8">
+              {/* <Link href="#" prefetch={false}>
+                <MountainIcon className="h-8 w-8" />
+                <span className="sr-only">Acme Inc</span>
+              </Link> */}
+              <Link href="#" prefetch={false}>
+                <Image
+                  src={"/img/carbon-trust.png"}
+                  width={80}
+                  height={100}
+                  alt="Carbon Trust Logo"
+                />
+              </Link>
+            </div>
+          </footer>
         </div>
       </div>
     </>

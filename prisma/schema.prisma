@@ -7,27 +7,37 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Management {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User[]
+}
+
 model User {
   id            String          @id @default(cuid())
   name          String?
   email         String          @unique
   username      String          @unique
   emailVerified DateTime?
-  password      String?
+  password      String?         @default("$2a$10$cJ4rP/D/DkyOOZvzZTwJTOxMvIMzs8Em30tQpazU69rN5rxTd5k9q")
   image         String?
+  managementId  Int
+  management    Management      @relation(fields: [managementId], references: [id])
   accounts      Account[]
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
   Team               Team?                @relation(fields: [teamId], references: [id])
-  teamId             String?
+  teamId             Int?
   FormResponse       FormResponse[]
   TeamDetail         TeamDetail[]
   ResetPasswordToken ResetPasswordToken[]
+  Station            Station[]
 }
 
 model Account {
@@ -56,9 +66,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -74,7 +83,7 @@ model ResetPasswordToken {
   token     String   @unique @default(uuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  expired   Boolean  @default(false) 
+  expired   Boolean  @default(false)
   createdAt DateTime @default(now())
 }
 
@@ -94,20 +103,19 @@ model Authenticator {
 }
 
 model Team {
-  id           String         @id @default(cuid())
+  id           Int            @id @default(autoincrement())
   name         String
   points       Int            @default(0)
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  Station      Station[]
   PointPerWeek PointPerWeek[]
   TeamDetail   TeamDetail[]
   User         User[]
 }
 
 model TeamDetail {
-  id        String   @id @default(cuid())
-  teamId    String
+  id        Int      @id @default(autoincrement())
+  teamId    Int
   team      Team     @relation(fields: [teamId], references: [id])
   userId    String
   user      User     @relation(fields: [userId], references: [id])
@@ -118,8 +126,8 @@ model TeamDetail {
 model Station {
   id           String         @id @default(cuid())
   name         String
-  teamId       String
-  team         Team           @relation(fields: [teamId], references: [id])
+  userId       String
+  user         User           @relation(fields: [userId], references: [id])
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   FormResponse FormResponse[]
@@ -137,7 +145,7 @@ model FormResponse {
 
 model PointPerWeek {
   id        String   @id @default(cuid())
-  teamId    String
+  teamId    Int
   team      Team     @relation(fields: [teamId], references: [id])
   points    Int      @default(0)
   week      Int

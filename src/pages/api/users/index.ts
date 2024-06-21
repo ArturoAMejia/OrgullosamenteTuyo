@@ -51,7 +51,6 @@ const getUsers = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
           },
         },
       },
-      password: true,
     },
   });
 

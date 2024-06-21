@@ -17,7 +17,7 @@ export interface ITeam extends Team {
 const columnHelper = createColumnHelper<ITeam>();
 
 export const teamColumns: ColumnDef<ITeam>[] = [
-  columnHelper.accessor<"id", string>("id", {
+  columnHelper.accessor<"id", number>("id", {
     header: "Código",
     cell: (info) => info.getValue(),
   }),
