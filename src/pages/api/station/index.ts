@@ -55,7 +55,7 @@ const createStation = async (
   const station = await prisma.station.create({
     data: {
       name,
-      userId,
+      userId
     },
   });
 

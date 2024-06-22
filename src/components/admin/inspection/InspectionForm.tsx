@@ -15,14 +15,20 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { CheckIcon, XIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useCreateFormResponse } from "@/hooks/admin/useFormResponse";
+import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
+import { items } from "@/util/typesUtils";
 
 const inspectionSchema = z.object({
   stationId: z.string(),
   labeledItems: z.string(),
   nonLabeledItems: z.array(z.string()),
+  solutionNonLabeledItems: z.string(),
   separateItems: z.string(),
   nonSeparateItems: z.array(z.string()),
-  problemSolution: z.string(),
+  solutionNonSeparateItems: z.string(),
   observations: z.string(),
 });
 
@@ -38,7 +44,8 @@ export const InspectionForm = () => {
       nonLabeledItems: [],
       separateItems: "",
       nonSeparateItems: [],
-      problemSolution: "",
+      solutionNonLabeledItems: "",
+      solutionNonSeparateItems: "",
       observations: "",
     },
   });
@@ -46,40 +53,27 @@ export const InspectionForm = () => {
   const labeledItems = form.watch("labeledItems");
   const separateItems = form.watch("separateItems");
 
-  const items = [
-    {
-      id: "recents",
-      label: "Recents",
-    },
-    {
-      id: "home",
-      label: "Home",
-    },
-    {
-      id: "applications",
-      label: "Applications",
-    },
-    {
-      id: "desktop",
-      label: "Desktop",
-    },
-    {
-      id: "downloads",
-      label: "Downloads",
-    },
-    {
-      id: "documents",
-      label: "Documents",
-    },
-  ] as const;
+  const formResponse = useCreateFormResponse();
+  const { data: session } = useSession();
 
-  const onSubmit = () => {};
+  const onSubmit = async (data: FormData) => {
+    try {
+      await formResponse.mutateAsync({ ...data, userId: session.user });
+      toast.success("Formulario enviado correctamente");
+      form.reset();
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
 
   return (
     <>
       <Form {...form}>
-        <form className="w-[480px] " onSubmit={form.handleSubmit(onSubmit)}>
-          <h3 className="font-bold text-xl my-4 text-center">I. Información General</h3>
+        <form
+          className="w-[480px] p-4 bg-white rounded-md text-black"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <h3 className="font-bold text-xl my-4">I. Información General</h3>
           <div className="flex justify-center">
             <FormField
               control={form.control}
@@ -87,17 +81,22 @@ export const InspectionForm = () => {
               render={({ field }) => (
                 <FormItem className="w-full my-2">
                   <FormLabel className="text-base">
-                    1. Ingrese su número de estación
+                    1. Indique el número de estación a la que se realizó la
+                    inspección
                   </FormLabel>
                   <FormControl>
-                    <Input className="w-full" {...field}  type="number"/>
+                    <Input
+                      className="w-full text-white bg-[#006838]"
+                      {...field}
+                      type="number"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <h3 className="font-bold text-xl my-4 text-center">
+          <h3 className="font-bold text-xl my-4">
             II. Criterios de Inspección de estaciones de residuos
           </h3>
           <div className="flex-col gap-4 justify-center">
@@ -106,7 +105,7 @@ export const InspectionForm = () => {
               name="labeledItems"
               render={({ field }) => (
                 <FormItem className="space-y-3 my-2">
-                  <FormLabel className="text-base">
+                  <FormLabel className="text-base text-left">
                     2. ¿Las estaciones de separación están debidamente
                     rotuladas?
                   </FormLabel>
@@ -119,12 +118,12 @@ export const InspectionForm = () => {
                         <FormControl>
                           <RadioGroupItem value="true" className="invisible" />
                         </FormControl>
-                        <FormLabel className="font-normal">
+                        <FormLabel className="font-normal hover:cursor-pointer">
                           <CheckIcon
                             className={
                               labeledItems === "true"
-                                ? "bg-green-700 rounded-md text-white"
-                                : ""
+                                ? " w-10 h-10 bg-[#046A38] rounded-md text-black"
+                                : "w-10 h-10 bg-[#046A38] rounded-md text-white"
                             }
                           />
                         </FormLabel>
@@ -133,12 +132,12 @@ export const InspectionForm = () => {
                         <FormControl>
                           <RadioGroupItem value="false" className="invisible" />
                         </FormControl>
-                        <FormLabel className="font-normal">
+                        <FormLabel className="font-normal hover:cursor-pointer">
                           <XIcon
                             className={
                               labeledItems === "false"
-                                ? "bg-red-700 rounded-md text-white"
-                                : ""
+                                ? "bg-[#046A38] rounded-md text-black w-10 h-10"
+                                : "bg-[#046A38] rounded-md text-white w-10 h-10"
                             }
                           />
                         </FormLabel>
@@ -151,62 +150,112 @@ export const InspectionForm = () => {
             />
 
             {labeledItems === "false" ? (
-              <FormField
-                control={form.control}
-                name="nonLabeledItems"
-                render={() => (
-                  <FormItem className="space-y-3 my-2">
-                    <div className="mb-4">
-                      <FormLabel className="text-base">
-                        3. Si los recipientes de la estación no están
-                        debidamente rotulados, por favor seleccione el o los
-                        recipientes que presentaron la incidencia
-                      </FormLabel>
-                    </div>
-                    <div className="grid grid-cols-3 gap-3">
-                      {items.map((item) => (
-                        <FormField
-                          key={item.id}
-                          control={form.control}
-                          name="nonLabeledItems"
-                          render={({ field }) => {
-                            return (
-                              <FormItem
-                                key={item.id}
-                                className="flex flex-row items-start space-x-3 space-y-0"
-                              >
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(item.id)}
-                                    onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([
-                                            ...field.value,
-                                            item.id,
-                                          ])
-                                        : field.onChange(
-                                            field.value?.filter(
-                                              (value) => value !== item.id
-                                            )
-                                          );
-                                    }}
-                                    className="w-5 h-5"
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  {item.label}
-                                </FormLabel>
-                              </FormItem>
-                            );
-                          }}
-                        />
-                      ))}
-                    </div>
+              <>
+                <FormField
+                  control={form.control}
+                  name="nonLabeledItems"
+                  render={() => (
+                    <FormItem className="space-y-3 my-2">
+                      <div className="mb-4">
+                        <FormLabel className="text-base text-justify">
+                          3. Si los recipientes de la estación no están
+                          debidamente rotulados, favor seleccione el o los
+                          recipientes que presentaron la incidencia
+                        </FormLabel>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        {items.map((item) => (
+                          <FormField
+                            key={item.id}
+                            control={form.control}
+                            name="nonLabeledItems"
+                            render={({ field }) => {
+                              return (
+                                <FormItem
+                                  key={item.id}
+                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(item.id)}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([
+                                              ...field.value,
+                                              item.id,
+                                            ])
+                                          : field.onChange(
+                                              field.value?.filter(
+                                                (value) => value !== item.id
+                                              )
+                                            );
+                                      }}
+                                      className="w-5 h-5"
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    {item.label}
+                                  </FormLabel>
+                                </FormItem>
+                              );
+                            }}
+                          />
+                        ))}
+                      </div>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="solutionNonLabeledItems"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3 my-2">
+                      <FormLabel className="text-base">
+                        {labeledItems === "false" ? "4." : "3."} Favor indique
+                        como solucionó la incidencia:
+                      </FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          className="flex flex-col space-y-1"
+                        >
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem
+                                value="Gestioné la rotulación con Gestión Ambiental a
+                              corto plazo"
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Gestioné la rotulación con Gestión Ambiental a
+                              corto plazo
+                            </FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="Coloque una rotulación temporal" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Coloque una rotulación temporal
+                            </FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="false" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Solamente reporté la incidencia
+                            </FormLabel>
+                          </FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
             ) : null}
 
             <FormField
@@ -214,8 +263,8 @@ export const InspectionForm = () => {
               name="separateItems"
               render={({ field }) => (
                 <FormItem className="space-y-3 my-2">
-                  <FormLabel className="text-base">
-                    {labeledItems === "false" ? "4." : "3."} ¿La estación
+                  <FormLabel className="text-base text-justify">
+                    {labeledItems === "false" ? "5." : "4."} ¿La estación
                     muestra una adecuada separación de residuos sólidos?
                   </FormLabel>
                   <FormControl>
@@ -227,12 +276,12 @@ export const InspectionForm = () => {
                         <FormControl>
                           <RadioGroupItem value="true" className="invisible" />
                         </FormControl>
-                        <FormLabel className="font-normal">
+                        <FormLabel className="font-bold hover:cursor-pointer">
                           <CheckIcon
                             className={
                               separateItems === "true"
-                                ? "bg-green-700 rounded-md text-white"
-                                : ""
+                                ? "bg-[#046A38] rounded-md text-black w-10 h-10"
+                                : "bg-[#046A38] rounded-md text-white w-10 h-10"
                             }
                           />
                         </FormLabel>
@@ -241,12 +290,12 @@ export const InspectionForm = () => {
                         <FormControl>
                           <RadioGroupItem value="false" className="invisible" />
                         </FormControl>
-                        <FormLabel className="font-normal">
+                        <FormLabel className="font-normal hover:cursor-pointer">
                           <XIcon
                             className={
                               separateItems === "false"
-                                ? "bg-red-700 rounded-md text-white"
-                                : ""
+                                ? "bg-[#046A38] rounded-md text-black w-10 h-10"
+                                : "bg-[#046A38] rounded-md text-white w-10 h-10"
                             }
                           />
                         </FormLabel>
@@ -266,14 +315,14 @@ export const InspectionForm = () => {
                   render={() => (
                     <FormItem className="space-y-3 my-2">
                       <div className="mb-4">
-                        <FormLabel className="text-base">
+                        <FormLabel className="text-base text-justify">
                           {labeledItems === "false" ? "5." : "4."} Si los
                           residuos de los recipientes no están debidamente
                           separados, por favor seleccione el o los recipientes
                           que presentaron la incidencia
                         </FormLabel>
                       </div>
-                      <div className="grid grid-cols-3 gap-3">
+                      <div className="grid grid-cols-2 gap-3">
                         {items.map((item) => (
                           <FormField
                             key={item.id}
@@ -316,23 +365,50 @@ export const InspectionForm = () => {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
-                  name="problemSolution"
+                  name="solutionNonSeparateItems"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="space-y-3 my-2">
                       <FormLabel className="text-base">
-                        {labeledItems === "false" && separateItems === "false"
-                          ? "6. "
-                          : labeledItems === "false"
-                          ? "5. "
-                          : separateItems === "false"
-                          ? "5. "
-                          : "5. "}
-                        Cuéntanos como solucionaste estos problemas
+                        {labeledItems === "false" ? "6." : "5."} Favor indique
+                        como solucionó la incidencia:
                       </FormLabel>
                       <FormControl>
-                        <Textarea className="resize-none" {...field} />
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          className="flex flex-col space-y-1"
+                        >
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem
+                                value="Gestioné la rotulación con Gestión Ambiental a
+                              corto plazo"
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Gestioné la rotulación con Gestión Ambiental a
+                              corto plazo
+                            </FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="Coloque una rotulación temporal" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Coloque una rotulación temporal
+                            </FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="Solamente reporté la incidencia" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Solamente reporté la incidencia
+                            </FormLabel>
+                          </FormItem>
+                        </RadioGroup>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -341,29 +417,17 @@ export const InspectionForm = () => {
               </>
             ) : null}
 
-            <FormField
-              control={form.control}
-              name="observations"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base">
-                    {labeledItems === "false" && separateItems === "false"
-                      ? "7. "
-                      : labeledItems === "false"
-                      ? "5. "
-                      : separateItems === "false"
-                      ? "6. "
-                      : "4. "}
-                    Comentarios adicionales
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea className="resize-none" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <h3 className="text-xl font-bold mt-8">
+              Cualquier comentario adicional comunicarte al grupo de WhatsApp
+            </h3>
           </div>
+          <Button
+            type="submit"
+            className="w-full bg-[#F3B800] mt-4 font-bold"
+            disabled={formResponse.isPending ? true : false}
+          >
+            Enviar
+          </Button>
         </form>
       </Form>
     </>

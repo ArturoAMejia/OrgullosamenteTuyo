@@ -11,6 +11,7 @@ CREATE TABLE "Management" (
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
+    "userId" SERIAL NOT NULL,
     "name" TEXT,
     "email" TEXT NOT NULL,
     "username" TEXT NOT NULL,
@@ -18,6 +19,7 @@ CREATE TABLE "User" (
     "password" TEXT DEFAULT '$2a$10$cJ4rP/D/DkyOOZvzZTwJTOxMvIMzs8Em30tQpazU69rN5rxTd5k9q',
     "image" TEXT,
     "managementId" INTEGER NOT NULL,
+    "points" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "teamId" INTEGER,
@@ -111,9 +113,9 @@ CREATE TABLE "TeamDetail" (
 
 -- CreateTable
 CREATE TABLE "Station" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -122,9 +124,10 @@ CREATE TABLE "Station" (
 
 -- CreateTable
 CREATE TABLE "FormResponse" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "userId" TEXT NOT NULL,
-    "stationId" TEXT NOT NULL,
+    "stationId" INTEGER NOT NULL,
+    "week" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -142,6 +145,9 @@ CREATE TABLE "PointPerWeek" (
 
     CONSTRAINT "PointPerWeek_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_userId_key" ON "User"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
@@ -183,7 +189,7 @@ ALTER TABLE "TeamDetail" ADD CONSTRAINT "TeamDetail_teamId_fkey" FOREIGN KEY ("t
 ALTER TABLE "TeamDetail" ADD CONSTRAINT "TeamDetail_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Station" ADD CONSTRAINT "Station_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Station" ADD CONSTRAINT "Station_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "FormResponse" ADD CONSTRAINT "FormResponse_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

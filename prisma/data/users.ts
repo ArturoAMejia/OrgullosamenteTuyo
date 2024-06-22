@@ -8,7 +8,7 @@ export const users = [
   {
     name: "María Teresa Solís",
     email: "mariateresa@correo.com",
-    username: "mariateresa",
+    username: "mariasolis",
     managementId: 2,
   },
   {

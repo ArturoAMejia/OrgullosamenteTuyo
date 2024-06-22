@@ -2,6 +2,7 @@ import { users } from "./data/users";
 import { management } from "./data/managment";
 import { teamAsign, teamDetail, teams } from "./data/teams";
 import { PrismaClient } from "@prisma/client";
+import { stations } from "./data/stations";
 
 const prisma = new PrismaClient();
 
@@ -13,6 +14,7 @@ const main = async (): Promise<void> => {
   await prisma.user.createMany({
     data: users,
   });
+
   const newUsers = await prisma.user.findMany();
 
   await prisma.team.createMany({
@@ -27,6 +29,11 @@ const main = async (): Promise<void> => {
       };
     }),
   });
+
+  await prisma.station.createMany({
+    data: stations
+  })
+
 
   await prisma.$disconnect();
   try {
