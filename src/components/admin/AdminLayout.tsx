@@ -33,6 +33,7 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
   return (
     <>
       <Head>
+        <link rel="shortcut icon" href="/img/logo.ico" type="image/x-icon" />
         <title>{title}</title>
       </Head>
 
@@ -174,7 +175,7 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
             {children}
             <Toaster position="top-right" reverseOrder={false} />
           </main>
-          <footer className="bg-[#64A70B] py-8 w-full">
+          <footer className="bg-[#046A38] py-8 w-full">
             <div className="container flex items-center justify-center gap-8">
               {/* <Link href="#" prefetch={false}>
                 <MountainIcon className="h-8 w-8" />

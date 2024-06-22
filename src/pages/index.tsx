@@ -2,54 +2,25 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { InspectionForm } from "@/components/admin/inspection/InspectionForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
+import { getWeek } from "date-fns";
 
-export default function Home() {
+type Props = {
+  teams: any;
+};
+
+const Home: FC<Props> = ({ teams }) => {
   return (
-    <AdminLayout title="Prueba">
-      <div className="bg-[url('/img/pattern-paper.jpg')] grid grid-cols-1 gap-4 border-[#046A38] border-[12px] rounded-md p-4 w-auto">
-        <div className="flex justify-center">
+    <AdminLayout title="Inicio">
+      <div className="w-full flex justify-center ">
+        <div>
           <Image
-            className="hidden md:block"
-            src={"/img/logo.png"}
-            alt="Logo"
-            width={350}
-            height={350}
-          />
-          <Image
-            className="md:hidden"
-            src={"/img/logo.png"}
-            alt="Logo"
-            width={250}
-            height={250}
+            src="/img/form.png"
+            alt="art"
+            className="w-full h-full"
+            width={750}
+            height={750}
           />
         </div>
-        <div className="flex justify-center items-center text-3xl font-bold gap-6 font-sans">
-          <h1 className="text-center">
-            Seguimiento a Estaciones <br />
-            de Separación de Residuos
-          </h1>
-          <div>
-            <Image
-              className="hidden md:block"
-              src={"/img/carbon-trust.png"}
-              alt="Logo"
-              width={150}
-              height={150}
-            />
-            <Image
-              className="md:hidden"
-              src={"/img/carbon-trust.png"}
-              alt="Logo"
-              width={100}
-              height={100}
-            />
-          </div>
-        </div>
-        <h3 className="text-center mt-6 font-bold text-lg">
-          Agradecemos tu apoyo llenando este formulario para <br />
-          el seguimiento a la acción Cero Residuos. ¡Equipo de Embajadores
-          Ambientales!
-        </h3>
       </div>
       <div className="flex justify-center">
         <Tabs defaultValue="scoreboard" className="">
@@ -59,7 +30,7 @@ export default function Home() {
             <TabsTrigger value="qa">Cuestionario</TabsTrigger>
           </TabsList>
           <TabsContent className="w-full" value="scoreboard">
-            TODO: Tabla de puntakes
+            <Scoreboard teams={teams} />
           </TabsContent>
           <TabsContent className="w-full" value="form">
             <InspectionForm />
@@ -68,4 +39,80 @@ export default function Home() {
       </div>
     </AdminLayout>
   );
-}
+};
+
+export default Home;
+
+import { GetServerSideProps } from "next";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { prisma } from "@/database";
+import { Scoreboard } from "@/components/admin/scores/Scoreboard";
+import { FC } from "react";
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = (await getServerSession(
+    ctx.req,
+    ctx.res,
+    authOptions
+  )) as any;
+
+  console.log(session.user.sub);
+
+  const teamId = await prisma.teamDetail.findFirst({
+    where: {
+      userId: session.user.sub,
+    },
+  });
+
+  console.log(teamId.teamId);
+
+  const teams = await prisma.team.findMany();
+
+  const fechaActual = new Date();
+  const week = getWeek(fechaActual);
+
+  const points = await prisma.pointPerWeek.groupBy({
+    by: ["week", "teamId"],
+    _sum: {
+      points: true,
+    },
+    where: {
+      week,
+    },
+  });
+
+  const scoreBoard = points.map((point) => {
+    return {
+      week: point.week,
+      teamId: point.teamId,
+      teamName: teams.find((team) => team.id === point.teamId).name,
+      points: point._sum.points,
+    };
+  });
+
+  const fr = await prisma.formResponse.findMany({
+    where: {
+      week,
+    },
+  });
+
+  const stations = await prisma.station.findMany();
+
+  const availableStations = stations.filter((station) => {
+    return !fr.some((f) => f.stationId === station.id);
+  });
+
+  console.log(availableStations.length);
+  console.log(stations.length);
+
+  console.log(points);
+  console.log(scoreBoard);
+
+  return {
+    props: {
+      points,
+      teams: JSON.parse(JSON.stringify(teams)),
+    },
+  };
+};

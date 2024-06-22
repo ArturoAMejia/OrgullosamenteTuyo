@@ -1,15 +1,7 @@
 import { prisma } from "@/database";
 import { FormResponse } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
-import {
-  eachWeekOfInterval,
-  isWithinInterval,
-  parseISO,
-  addDays,
-  startOfWeek,
-  endOfWeek,
-  getWeek,
-} from "date-fns";
+import { getWeek } from "date-fns";
 
 type Data =
   | {
@@ -116,13 +108,42 @@ const createFormResponse = async (
         points: p.points + 5,
       },
     });
+    const teamPoints = await prisma.team.findFirst({
+      where: { id: team.teamId },
+    });
+
+    await prisma.team.update({
+      where: {
+        id: team.teamId,
+      },
+      data: {
+        points: teamPoints.points + 5,
+      },
+    });
+
+    await prisma.$disconnect();
+
+    return res.status(200).json(formRes);
   }
 
-  const points = await prisma.pointPerWeek.create({
+  await prisma.pointPerWeek.create({
     data: {
       teamId: team.teamId,
       week,
       points: 5,
+    },
+  });
+
+  const teamPoints = await prisma.team.findFirst({
+    where: { id: team.teamId },
+  });
+
+  await prisma.team.update({
+    where: {
+      id: team.teamId,
+    },
+    data: {
+      points: teamPoints.points + 5,
     },
   });
 
