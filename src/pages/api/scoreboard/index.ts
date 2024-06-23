@@ -2,6 +2,7 @@ import { prisma } from "@/database";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
+import { getWeek } from "date-fns";
 
 type Data =
   | {
@@ -27,7 +28,6 @@ const getScoreboard = async (
   res: NextApiResponse<Data>
 ) => {
   const session = (await getServerSession(req, res, authOptions)) as any;
-  console.log(session.user.sub);
 
   await prisma.$connect();
 
@@ -37,23 +37,7 @@ const getScoreboard = async (
     },
   });
 
-  console.log(teamId.teamId);
-
   const t = await prisma.team.findMany();
-
-  const test = await prisma.team.findMany({
-    select: {
-      User: {
-        select: {
-          Station: {
-            select: {
-              id: true,
-            },
-          },
-        },
-      },
-    },
-  });
 
   const fechaActual = new Date();
   const week = getWeek(fechaActual);
@@ -86,12 +70,44 @@ const getScoreboard = async (
 
   const stations = await prisma.station.findMany();
 
+  const usersTeam = await prisma.teamDetail.findMany();
+
+  const users = await prisma.user.findMany();
+
+  const usersFinal = usersTeam.map((ut) => {
+    const user = users.find((u) => u.id === ut.userId);
+    return {
+      teamId: ut.teamId,
+      userId: user.userId,
+    };
+  });
+
+  console.log(usersFinal);
+
   const availableStations = stations.filter((station) => {
     return !fr.some((f) => f.stationId === station.id);
   });
 
-  // const availableStationsPerTeam = Object.groupBy(availableStations, "teamId");
+  const stationsFinal = availableStations.map((station) => {
+    const users = usersFinal.find((u) => u.userId === station.userId);
+    return {
+      ...station,
+      teamId: users.teamId,
+    };
+  });
+
+  const groupedByTeamId = stationsFinal.reduce((acc, estacion) => {
+    const { teamId, ...rest } = estacion;
+    if (!acc[teamId]) {
+      acc[teamId] = [];
+    }
+    acc[teamId].push({ rest, teamId });
+    return acc;
+  }, []);
+
+  console.log(groupedByTeamId);
+
   await prisma.$disconnect();
 
-  return res.status(200).json({ teams });
+  return res.status(200).json({ teams, availableStations: groupedByTeamId.slice(1, 6)});
 };

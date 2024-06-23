@@ -1,14 +1,16 @@
+import Image from "next/image";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { InspectionForm } from "@/components/admin/inspection/InspectionForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Image from "next/image";
-import { getWeek } from "date-fns";
+import { Scoreboard } from "@/components/admin/scores/Scoreboard";
+import { useGetScoreboard } from "@/hooks/admin/useScoreboard";
+import { Loader } from "@/components/ui/Loader";
+import { ShowAvailableStations } from "@/components/admin/scores/ShowAvailableStations";
 
-type Props = {
-  teams: any;
-};
+const Home = ({ teams }) => {
+  const { data, isLoading } = useGetScoreboard();
 
-const Home: FC<Props> = ({ teams }) => {
+  console.log(data);
   return (
     <AdminLayout title="Inicio">
       <div className="w-full flex justify-center ">
@@ -30,10 +32,18 @@ const Home: FC<Props> = ({ teams }) => {
             <TabsTrigger value="qa">Cuestionario</TabsTrigger>
           </TabsList>
           <TabsContent className="w-full" value="scoreboard">
-            <h2 className="text-3xl font-bold text-center mb-4">
+            <h2 className="text-3xl font-bold text-center my-4">
               Tabla de posiciones
             </h2>
-            <Scoreboard teams={teams} />
+
+            {isLoading ? <Loader /> : <Scoreboard teams={data.teams} />}
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <div className="flex justify-center my-6">
+                <ShowAvailableStations stationsTeam={data.availableStations} />
+              </div>
+            )}
           </TabsContent>
           <TabsContent className="w-full" value="form">
             <InspectionForm />
@@ -45,84 +55,3 @@ const Home: FC<Props> = ({ teams }) => {
 };
 
 export default Home;
-
-import { GetServerSideProps } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]";
-import { prisma } from "@/database";
-import { Scoreboard } from "@/components/admin/scores/Scoreboard";
-import { FC } from "react";
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = (await getServerSession(
-    ctx.req,
-    ctx.res,
-    authOptions
-  )) as any;
-
-  console.log(session.user.sub);
-
-  const teamId = await prisma.teamDetail.findFirst({
-    where: {
-      userId: session.user.sub,
-    },
-  });
-
-  console.log(teamId.teamId);
-
-  const t = await prisma.team.findMany();
-
-  const test = await prisma.team.findMany({
-    select: {
-      User: {
-        select: {
-          Station: {
-            select: {
-              id: true,
-            },
-          },
-        },
-      },
-    },
-  });
-
-  const fechaActual = new Date();
-  const week = getWeek(fechaActual);
-
-  const points = await prisma.pointPerWeek.groupBy({
-    by: ["week", "teamId"],
-    _sum: {
-      points: true,
-    },
-    where: {
-      week,
-    },
-  });
-
-  const teams = t.map((team) => {
-    const score = points.find((point) => point.teamId === team.id);
-    return {
-      ...team,
-      pointsPerWeek: score ? score._sum.points : 0,
-    };
-  }).toSorted((a, b) => b.points - a.points);
-
-  const fr = await prisma.formResponse.findMany({
-    where: {
-      week,
-    },
-  });
-
-  const stations = await prisma.station.findMany();
-
-  const availableStations = stations.filter((station) => {
-    return !fr.some((f) => f.stationId === station.id);
-  });
-
-
-  return {
-    props: {
-      teams: JSON.parse(JSON.stringify(teams)),
-    },
-  };
-};
