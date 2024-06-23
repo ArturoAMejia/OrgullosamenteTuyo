@@ -6,7 +6,7 @@ type Props = {
 };
 
 export const Scoreboard: FC<Props> = ({ teams }) => {
-  const sortedTeams = teams.toSorted((a, b) => b.pointsPerWeek - a.pointsPerWeek);
+  const sortedTeams = teams.slice().sort((a, b) => b.pointsPerWeek - a.pointsPerWeek);
   return (
     <div className="flex justify-center">
       <div>

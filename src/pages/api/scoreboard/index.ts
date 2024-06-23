@@ -60,7 +60,8 @@ const getScoreboard = async (
         pointsPerWeek: score ? score._sum.points : 0,
       };
     })
-    .toSorted((a, b) => b.points - a.points);
+    .slice()
+    .sort((a, b) => b.points - a.points);
 
   const fr = await prisma.formResponse.findMany({
     where: {
@@ -109,5 +110,7 @@ const getScoreboard = async (
 
   await prisma.$disconnect();
 
-  return res.status(200).json({ teams, availableStations: groupedByTeamId.slice(1, 6)});
+  return res
+    .status(200)
+    .json({ teams, availableStations: groupedByTeamId.slice(1, 6) });
 };
