@@ -25,7 +25,6 @@ const ResetPasswordPage = () => {
 
   const resetPassword = useResetPassword();
   const onResetPassword = async (data: FormData) => {
-    console.log(data);
     try {
       await resetPassword.mutateAsync(data.email);
       toast.success("Correo enviado, revisa tu bandeja de entrada");

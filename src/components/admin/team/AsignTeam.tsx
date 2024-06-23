@@ -66,7 +66,6 @@ export const AsignTeam: FC<Props> = ({ user }) => {
     }
   };
 
-  console.log(data);
   if (isLoading) {
     return <Loader />;
   }

@@ -17,7 +17,7 @@ type Props = {
 };
 
 export const TeamDetails: FC<Props> = ({ team }) => {
-  console.log(team);
+
   return (
     <AlertDialog>
       <AlertDialogTrigger>Ver detalles</AlertDialogTrigger>

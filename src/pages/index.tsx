@@ -10,7 +10,6 @@ import { ShowAvailableStations } from "@/components/admin/scores/ShowAvailableSt
 const Home = ({ teams }) => {
   const { data, isLoading } = useGetScoreboard();
 
-  console.log(data);
   return (
     <AdminLayout title="Inicio">
       <div className="w-full flex justify-center ">

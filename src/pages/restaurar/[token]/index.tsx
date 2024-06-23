@@ -27,7 +27,7 @@ const ResetPasswordPageToken: FC<Props> = ({ token }) => {
   const router = useRouter()
 
   const onResetPassword = async (data: FormData) => {
-    console.log(data);
+
     try {
       await resetPassword.mutateAsync({ token, password: data.email });
       toast.success("Contraseña restablecida correctamente");
