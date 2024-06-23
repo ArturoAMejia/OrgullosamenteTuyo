@@ -30,6 +30,9 @@ const Home: FC<Props> = ({ teams }) => {
             <TabsTrigger value="qa">Cuestionario</TabsTrigger>
           </TabsList>
           <TabsContent className="w-full" value="scoreboard">
+            <h2 className="text-3xl font-bold text-center mb-4">
+              Tabla de posiciones
+            </h2>
             <Scoreboard teams={teams} />
           </TabsContent>
           <TabsContent className="w-full" value="form">
@@ -67,7 +70,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   console.log(teamId.teamId);
 
-  const teams = await prisma.team.findMany();
+  const t = await prisma.team.findMany();
+
+  const test = await prisma.team.findMany({
+    select: {
+      User: {
+        select: {
+          Station: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      },
+    },
+  });
 
   const fechaActual = new Date();
   const week = getWeek(fechaActual);
@@ -82,14 +99,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   });
 
-  const scoreBoard = points.map((point) => {
+  const teams = t.map((team) => {
+    const score = points.find((point) => point.teamId === team.id);
     return {
-      week: point.week,
-      teamId: point.teamId,
-      teamName: teams.find((team) => team.id === point.teamId).name,
-      points: point._sum.points,
+      ...team,
+      pointsPerWeek: score ? score._sum.points : 0,
     };
-  });
+  }).toSorted((a, b) => b.points - a.points);
 
   const fr = await prisma.formResponse.findMany({
     where: {
@@ -103,15 +119,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return !fr.some((f) => f.stationId === station.id);
   });
 
-  console.log(availableStations.length);
-  console.log(stations.length);
-
-  console.log(points);
-  console.log(scoreBoard);
 
   return {
     props: {
-      points,
       teams: JSON.parse(JSON.stringify(teams)),
     },
   };

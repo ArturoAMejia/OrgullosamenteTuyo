@@ -1,5 +1,6 @@
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
+import "../styles/loader.css";
 import type { AppProps } from "next/app";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Lato } from "next/font/google";

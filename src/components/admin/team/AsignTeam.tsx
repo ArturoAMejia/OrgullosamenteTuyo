@@ -32,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Loader } from "@/components/ui/Loader";
 
 const AsignTeamUserSchema = z.object({
   teamId: z.string(),
@@ -67,7 +68,7 @@ export const AsignTeam: FC<Props> = ({ user }) => {
 
   console.log(data);
   if (isLoading) {
-    return <p>Cargando...</p>;
+    return <Loader />;
   }
 
   return (
@@ -85,7 +86,7 @@ export const AsignTeam: FC<Props> = ({ user }) => {
             onSubmit={form.handleSubmit(onAsignTeam)}
           >
             {isLoading ? (
-              <p>Cargando...</p>
+              <Loader />
             ) : (
               <FormField
                 control={form.control}

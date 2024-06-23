@@ -2,6 +2,7 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { CreateUser } from "@/components/admin/user/CreateUser";
 import { usersColumns } from "@/components/datatable/columns/UsersColumn";
 import { DataTable } from "@/components/datatable/Datatable";
+import { Loader } from "@/components/ui/Loader";
 import { useGetUsers } from "@/hooks/admin/useUser";
 import React from "react";
 
@@ -14,7 +15,7 @@ const ColaboradoresPage = () => {
         <CreateUser />
       </div>
       {isLoading ? (
-        <p>Cargando...</p>
+        <Loader />
       ) : (
         <DataTable columns={usersColumns} data={data} />
       )}
@@ -23,4 +24,3 @@ const ColaboradoresPage = () => {
 };
 
 export default ColaboradoresPage;
-
