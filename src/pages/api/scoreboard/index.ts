@@ -110,7 +110,9 @@ const getScoreboard = async (
 
   await prisma.$disconnect();
 
+  console.log(stationsFinal)
+
   return res
     .status(200)
-    .json({ teams, availableStations: groupedByTeamId.slice(1, 6) });
+    .json({ teams, availableStations: groupedByTeamId.slice(1, 6), stationsFinal });
 };

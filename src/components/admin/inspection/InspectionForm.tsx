@@ -83,7 +83,7 @@ export const InspectionForm = () => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="w-full text-white bg-[#006838]"
+                      className="w-full text-black border-4 border-[#006838]"
                       {...field}
                       type="number"
                     />
@@ -170,7 +170,7 @@ export const InspectionForm = () => {
                               return (
                                 <FormItem
                                   key={item.id}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                  className="flex flex-row items-center space-x-3 space-y-0"
                                 >
                                   <FormControl>
                                     <Checkbox
@@ -187,10 +187,10 @@ export const InspectionForm = () => {
                                               )
                                             );
                                       }}
-                                      className="w-5 h-5"
+                                      className="w-8 h-8 border-4 border-[#046A38]"
                                     />
                                   </FormControl>
-                                  <FormLabel className="font-normal">
+                                  <FormLabel className="font-normal text-md">
                                     {item.label}
                                   </FormLabel>
                                 </FormItem>
@@ -221,28 +221,35 @@ export const InspectionForm = () => {
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
                               <RadioGroupItem
+                                className="border-4 border-[#046A38] p-2"
                                 value="Gestioné la rotulación con Gestión Ambiental a
                               corto plazo"
                               />
                             </FormControl>
-                            <FormLabel className="font-normal">
+                            <FormLabel className="font-normal text-md">
                               Gestioné la rotulación con Gestión Ambiental a
                               corto plazo
                             </FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <RadioGroupItem value="Coloque una rotulación temporal" />
+                              <RadioGroupItem
+                                className="border-4 border-[#046A38] p-2"
+                                value="Coloque una rotulación temporal"
+                              />
                             </FormControl>
-                            <FormLabel className="font-normal">
+                            <FormLabel className="font-normal text-md">
                               Coloque una rotulación temporal
                             </FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <RadioGroupItem value="false" />
+                              <RadioGroupItem
+                                className="border-4 border-[#046A38] p-2"
+                                value="false"
+                              />
                             </FormControl>
-                            <FormLabel className="font-normal">
+                            <FormLabel className="font-normal text-md">
                               Solamente reporté la incidencia
                             </FormLabel>
                           </FormItem>
@@ -333,7 +340,7 @@ export const InspectionForm = () => {
                                 >
                                   <FormControl>
                                     <Checkbox
-                                      className="w-5 h-5"
+                                      className="w-8 h-8 border-4 border-[#046A38]"
                                       checked={field.value?.includes(item.id)}
                                       onCheckedChange={(checked) => {
                                         return checked
@@ -349,7 +356,7 @@ export const InspectionForm = () => {
                                       }}
                                     />
                                   </FormControl>
-                                  <FormLabel className="font-normal">
+                                  <FormLabel className="font-normal text-md">
                                     {item.label}
                                   </FormLabel>
                                 </FormItem>
@@ -380,28 +387,35 @@ export const InspectionForm = () => {
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
                               <RadioGroupItem
-                                value="Gestioné la rotulación con Gestión Ambiental a
-                              corto plazo"
+                                className="border-4 border-[#046A38] p-2"
+                                value="Notifiqué a mis compañeros aledaños para corregir
+                              la incidencia"
                               />
                             </FormControl>
-                            <FormLabel className="font-normal">
-                              Gestioné la rotulación con Gestión Ambiental a
-                              corto plazo
+                            <FormLabel className="font-normal text-md">
+                              Notifiqué a mis compañeros aledaños para corregir
+                              la incidencia
                             </FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <RadioGroupItem value="Coloque una rotulación temporal" />
+                              <RadioGroupItem
+                                className="border-4 border-[#046A38] p-2"
+                                value="Retirar el residuo de la estación equivocada"
+                              />
                             </FormControl>
-                            <FormLabel className="font-normal">
-                              Coloque una rotulación temporal
+                            <FormLabel className="font-normal text-md">
+                              Retirar el residuo de la estación equivocada
                             </FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                              <RadioGroupItem value="Solamente reporté la incidencia" />
+                              <RadioGroupItem
+                                className="border-4 border-[#046A38] p-2"
+                                value="Solamente reporté la incidencia"
+                              />
                             </FormControl>
-                            <FormLabel className="font-normal">
+                            <FormLabel className="font-normal text-md">
                               Solamente reporté la incidencia
                             </FormLabel>
                           </FormItem>

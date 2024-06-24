@@ -40,6 +40,7 @@ model User {
   TeamDetail         TeamDetail[]
   ResetPasswordToken ResetPasswordToken[]
   Station            Station[]
+  Questionary        Questionary[]
 }
 
 model Account {
@@ -167,6 +168,19 @@ model PointPerWeek {
   team      Team     @relation(fields: [teamId], references: [id])
   points    Int      @default(0)
   week      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Questionary {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  question1 String
+  question2 String
+  question3 String
+  week      Int?
+  status    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

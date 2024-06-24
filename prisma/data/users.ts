@@ -221,4 +221,16 @@ export const users = [
     username: "yadermoran",
     managementId: 17,
   },
+  {
+    name: "Arturo Mejía",
+    email: "armejia02@gmail.com",
+    username: "arturomejia",
+    managementId: 17,
+  },
+  {
+    name: "prueba 1",
+    email: "prueba@prueba.com",
+    username: "prueba",
+    managementId: 17,
+  },
 ];

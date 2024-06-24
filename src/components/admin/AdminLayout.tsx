@@ -16,6 +16,7 @@ import {
   MenuIcon,
   MountainIcon,
   Package2Icon,
+  StickyNoteIcon,
   TrophyIcon,
   UsersIcon,
 } from "lucide-react";
@@ -95,6 +96,14 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                   <UsersIcon className="h-4 w-4" />
                   Inicio
                 </Link>
+                <Link
+                  href="/respuestas-cuestionario"
+                  className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
+                  prefetch={false}
+                >
+                  <StickyNoteIcon className="h-4 w-4" />
+                  Respuestas de cuestionario
+                </Link>
               </nav>
             </div>
           </div>
@@ -162,6 +171,14 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                     <UsersIcon className="h-5 w-5" />
                     Inicio
                   </Link>
+                  <Link
+                    href="/respuestas-cuestionario"
+                    className="mx-[-0.65rem] flex font-bold items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground"
+                    prefetch={false}
+                  >
+                    <UsersIcon className="h-5 w-5" />
+                    Respuestas de cuestionario
+                  </Link>
                 </nav>
               </SheetContent>
             </Sheet>
@@ -191,7 +208,7 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
             {children}
             <Toaster position="top-right" reverseOrder={false} />
           </main>
-          <footer className="bg-[#046A38] py-8 w-full">
+          <footer className="border-8 border-[#046A38] py-8 w-full bg-[url('/img/g3.png')]">
             <div className="container flex items-center justify-center gap-8">
               {/* <Link href="#" prefetch={false}>
                 <MountainIcon className="h-8 w-8" />
