@@ -42,10 +42,6 @@ const createFormResponse = async (
 ) => {
   const { formResponse } = req.body;
 
-  console.log(req.body);
-  console.log(formResponse.stationId);
-  console.log(formResponse.userId.sub);
-  console.log(formResponse.stationId === "");
 
   if (formResponse.stationId === "")
     return res
@@ -61,7 +57,6 @@ const createFormResponse = async (
     },
   });
 
-  console.log(fr);
   const fechaActual = new Date();
 
   const week = getWeek(fechaActual);
