@@ -54,7 +54,7 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
             </div>
             <div className="flex-1">
               <nav className="grid items-start px-2 text-sm font-medium lg:px-4 bg-[#046A38]">
-                <Link
+                {/* <Link
                   href="/puntuacion"
                   className="flex items-center text-white font-bold gap-3 rounded-lg bg-[#00B5EB] px-3 py-2  transition-all "
                   prefetch={false}
@@ -86,6 +86,14 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                 >
                   <UsersIcon className="h-4 w-4" />
                   Colaboradores
+                </Link> */}
+                <Link
+                  href="/"
+                  className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
+                  prefetch={false}
+                >
+                  <UsersIcon className="h-4 w-4" />
+                  Inicio
                 </Link>
               </nav>
             </div>
@@ -114,7 +122,7 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                   <span>Embajadores Ambientales</span>
                 </Link>
                 <nav className="grid gap-2 text-lg font-bold">
-                  <Link
+                  {/* <Link
                     href="/puntuacion"
                     className="mx-[-0.65rem] flex font-bold items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
                     prefetch={false}
@@ -145,6 +153,14 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                   >
                     <UsersIcon className="h-5 w-5" />
                     Colaboradores
+                  </Link> */}
+                  <Link
+                    href="/"
+                    className="mx-[-0.65rem] flex font-bold items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground"
+                    prefetch={false}
+                  >
+                    <UsersIcon className="h-5 w-5" />
+                    Inicio
                   </Link>
                 </nav>
               </SheetContent>
