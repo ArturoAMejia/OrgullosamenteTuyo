@@ -7,7 +7,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,7 +28,6 @@ const inspectionSchema = z.object({
   separateItems: z.string(),
   nonSeparateItems: z.array(z.string()),
   solutionNonSeparateItems: z.string(),
-  observations: z.string(),
 });
 
 type FormData = z.infer<typeof inspectionSchema>;
@@ -46,7 +44,6 @@ export const InspectionForm = () => {
       nonSeparateItems: [],
       solutionNonLabeledItems: "",
       solutionNonSeparateItems: "",
-      observations: "",
     },
   });
 

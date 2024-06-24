@@ -80,6 +80,18 @@ const createFormResponse = async (
     },
   });
 
+  await prisma.formResponseDetail.create({
+    data: {
+      formResponseId: formRes.id,
+      question2: formResponse.labeledItems,
+      question3: formResponse.nonLabeledItems.toString(),
+      question4: formResponse.separateItems,
+      question5: formResponse.nonSeparateItems.toString(),
+      question6: formResponse.solutionNonLabeledItems,
+      question7: formResponse.solutionNonSeparateItems,
+    },
+  });
+
   const team = await prisma.teamDetail.findFirst({
     where: {
       userId: formResponse.userId.sub,

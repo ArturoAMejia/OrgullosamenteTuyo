@@ -136,14 +136,29 @@ model Station {
 }
 
 model FormResponse {
-  id        Int   @id @default(autoincrement())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  stationId Int
-  week      Int
-  station   Station  @relation(fields: [stationId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 Int                  @id @default(autoincrement())
+  userId             String
+  user               User                 @relation(fields: [userId], references: [id])
+  stationId          Int
+  week               Int
+  station            Station              @relation(fields: [stationId], references: [id])
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  FormResponseDetail FormResponseDetail[]
+}
+
+model FormResponseDetail {
+  id             Int          @id @default(autoincrement())
+  formResponse   FormResponse @relation(fields: [formResponseId], references: [id])
+  formResponseId Int
+  question2      String?
+  question3      String?
+  question4      String?
+  question5      String?
+  question6      String?
+  question7      String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
 model PointPerWeek {
