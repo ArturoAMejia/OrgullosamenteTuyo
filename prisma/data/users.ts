@@ -228,9 +228,9 @@ export const users = [
     managementId: 17,
   },
   {
-    name: "prueba 1",
-    email: "prueba@prueba.com",
-    username: "prueba",
+    name: "Administrador",
+    email: "admin@admin.com",
+    username: "administrador",
     managementId: 17,
   },
 ];

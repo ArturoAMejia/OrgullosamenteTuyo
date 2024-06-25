@@ -12,12 +12,8 @@ import {
 import { signOut } from "next-auth/react";
 import {
   CircleUserIcon,
-  MapPinIcon,
   MenuIcon,
-  MountainIcon,
   Package2Icon,
-  StickyNoteIcon,
-  TrophyIcon,
   UsersIcon,
 } from "lucide-react";
 import { FC } from "react";
@@ -96,14 +92,14 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                   <UsersIcon className="h-4 w-4" />
                   Inicio
                 </Link>
-                <Link
+                {/* <Link
                   href="/respuestas-cuestionario"
                   className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
                   prefetch={false}
                 >
                   <StickyNoteIcon className="h-4 w-4" />
                   Respuestas de cuestionario
-                </Link>
+                </Link> */}
               </nav>
             </div>
           </div>
@@ -171,14 +167,14 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                     <UsersIcon className="h-5 w-5" />
                     Inicio
                   </Link>
-                  <Link
+                  {/* <Link
                     href="/respuestas-cuestionario"
                     className="mx-[-0.65rem] flex font-bold items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground"
                     prefetch={false}
                   >
                     <UsersIcon className="h-5 w-5" />
                     Respuestas de cuestionario
-                  </Link>
+                  </Link> */}
                 </nav>
               </SheetContent>
             </Sheet>

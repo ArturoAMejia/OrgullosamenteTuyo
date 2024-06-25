@@ -83,7 +83,6 @@ const getScoreboard = async (
     };
   });
 
-  console.log(usersFinal);
 
   const availableStations = stations.filter((station) => {
     return !fr.some((f) => f.stationId === station.id);
@@ -106,11 +105,7 @@ const getScoreboard = async (
     return acc;
   }, []);
 
-  console.log(groupedByTeamId);
-
   await prisma.$disconnect();
-
-  console.log(stationsFinal)
 
   return res
     .status(200)

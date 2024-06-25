@@ -18,7 +18,7 @@ export const teams = [
 
 export const teamAsign = [
   1, 1, 1, 1, 1, 1, 1, 2, 3, 3, 3, 4, 4, 5, 5, 5, 4, 4, 5, 5, 5, 3, 3, 4, 4, 4,
-  5, 3, 5, 5, 2, 2, 2, 2, 2, 2, 3,
+  5, 3, 5, 5, 2, 2, 2, 2, 2, 2, 3, 3, 3,
 ];
 export const teamDetail = [
   {
@@ -168,5 +168,13 @@ export const teamDetail = [
   {
     teamId: 3,
     userId: 37,
+  },
+  {
+    teamId: 3,
+    userId: 38,
+  },
+  {
+    teamId: 3,
+    userId: 39,
   },
 ];
