@@ -1,4 +1,4 @@
-# VerdIES
+# Embajadores Ambientales
 
 ## Para poder arrancar el proyecto se debe de realizar los siguientes comandos
 
@@ -15,7 +15,8 @@ AUTH_SECRET=
 NEXTAUTH_SECRET=
 NEXTAUTH_URL=
 
-DATABASE_URL="postgresql://user:password@localhost:5432/taller-arte-xolotl?schema=public"NEXTAUTH_SECRET=
+DATABASE_URL="postgresql://user:password@localhost:5432/embajadores-ambientales?schema=public"
+NEXTAUTH_SECRET=
 ```
 
 Para realizar todas las migraciones, se debe de ejecutar el siguiente comando:
