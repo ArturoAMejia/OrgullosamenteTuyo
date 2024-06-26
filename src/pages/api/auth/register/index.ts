@@ -35,7 +35,18 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
     },
   });
 
+  const u = await prisma.user.findFirst({
+    where: {
+      username: first_name.toLowerCase() + lastname.toLowerCase(),
+    },
+  });
+
   if (e) return res.status(400).json({ message: "Este correo ya está en uso" });
+
+  if (u)
+    return res
+      .status(400)
+      .json({ message: "Este nombre de usuario ya está en uso" });
 
   const user = await prisma.user.create({
     data: {
@@ -43,7 +54,8 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
       email,
       username: first_name.toLowerCase() + lastname.toLowerCase(),
       password: bcrypt.hashSync(password),
-      managementId,
+      managementId: Number(managementId),
+      roleId: 2,
     },
   });
 

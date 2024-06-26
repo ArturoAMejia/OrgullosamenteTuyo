@@ -1,5 +1,4 @@
 import api from "@/api/api";
-import { queryClient } from "@/util/queryClient";
 import { User } from "@prisma/client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -8,8 +7,16 @@ interface new_user {
   lastname?: string;
   email?: string;
   password?: string;
+  managementId?: string;
 }
 
+interface update_user {
+  id?: string;
+  first_name?: string;
+  lastname?: string;
+  email?: string;
+  username?: string;
+}
 const getUsers = async () => {
   const { data } = await api.get("/users");
   return data;
@@ -20,8 +27,8 @@ const createUser = async (user: new_user) => {
   return data;
 };
 
-const editUser = async (user: User) => {
-  const { data } = await api.put(`/user`, user);
+const editUser = async (user: update_user) => {
+  const { data } = await api.put(`/users`, user);
   return data;
 };
 
@@ -31,28 +38,26 @@ const deleteUser = async (user: User) => {
 };
 
 export const useGetUsers = () => {
-  return useQuery({ queryKey: ["users"], queryFn: getUsers });
+  return useQuery({
+    queryKey: ["users"],
+    queryFn: getUsers,
+  });
 };
 
 export const useCreateUser = () => {
   const { refetch } = useGetUsers();
-  refetch();
+
   return useMutation({
     mutationFn: (user: new_user) => createUser(user),
-    onSuccess: (data) => {
-      queryClient.setQueryData(["Users", { id: data.id }], data);
-    },
+    onSuccess: () => refetch(),
   });
 };
 
 export const useEditUser = () => {
   const { refetch } = useGetUsers();
-  refetch();
   return useMutation({
-    mutationFn: (User: User) => editUser(User),
-    onSuccess: (data) => {
-      queryClient.setQueryData(["Users", { id: data.id }], data);
-    },
+    mutationFn: (user: update_user) => editUser(user),
+    onSuccess: () => refetch(),
   });
 };
 
@@ -63,9 +68,9 @@ const asignTeam = async (userId: string, teamId?: string) => {
 
 export const useAsignTeam = () => {
   const { refetch } = useGetUsers();
-  refetch();
   return useMutation({
     mutationFn: (data: { userId: string; teamId?: string }) =>
       asignTeam(data.userId, data?.teamId),
+    onSuccess: () => refetch(),
   });
 };

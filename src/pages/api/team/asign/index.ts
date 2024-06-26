@@ -39,7 +39,7 @@ const asignUserTeam = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const team = await prisma.team.findUnique({
     where: {
-      id: teamId,
+      id: Number(teamId),
     },
   });
 
@@ -51,7 +51,7 @@ const asignUserTeam = async (req: NextApiRequest, res: NextApiResponse) => {
   const userTeam = await prisma.teamDetail.create({
     data: {
       userId,
-      teamId,
+      teamId: team.id,
     },
   });
 

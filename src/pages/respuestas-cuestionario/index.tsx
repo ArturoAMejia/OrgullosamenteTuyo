@@ -1,14 +1,18 @@
-import React from "react";
+import React, { FC } from "react";
 import { AdminLayout } from "../../components/admin/AdminLayout";
 import { Loader } from "../../components/ui/Loader";
 import { useGetQuestionaryResponse } from "../../hooks/admin/useFormResponse";
 import { AsignExtraPoints } from "../../components/admin/scores/AsignExtraPoints";
 import { ShowAnswers } from "../../components/admin/questionary/ShowAnswers";
 
-const QuestionaryResponsePage = () => {
+type Props = {
+  roleId?: number;
+};
+
+const QuestionaryResponsePage: FC<Props> = ({ roleId }) => {
   const { data, isLoading } = useGetQuestionaryResponse();
   return (
-    <AdminLayout title="Respuestas de Cuestionario">
+    <AdminLayout title="Respuestas de Cuestionario" roleId={roleId}>
       <div className="flex justify-center">
         <h1 className="text-2xl font-bold">Respuestas de Cuestionario</h1>
       </div>
@@ -35,3 +39,28 @@ const QuestionaryResponsePage = () => {
 };
 
 export default QuestionaryResponsePage;
+
+import { GetServerSideProps } from "next";
+import { prisma } from "@/database";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = (await getServerSession(
+    ctx.req,
+    ctx.res,
+    authOptions
+  )) as any;
+  console.log(session);
+  const user = await prisma.user.findFirst({
+    where: {
+      id: session.user.sub,
+    },
+  });
+
+  return {
+    props: {
+      roleId: user.roleId,
+    },
+  };
+};

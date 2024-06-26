@@ -7,15 +7,19 @@ import { useGetScoreboard } from "@/hooks/admin/useScoreboard";
 import { Loader } from "@/components/ui/Loader";
 import { ShowAvailableStations } from "@/components/admin/scores/ShowAvailableStations";
 import { QuestionaryForm } from "../components/admin/questionary/QuestionaryForm";
-import { useState } from "react";
+import { FC, useState } from "react";
 
-const Home = ({ teams }) => {
+type Props = {
+  roleId?: number;
+};
+
+const Home: FC<Props> = ({ roleId = 2 }) => {
   const { data, isLoading } = useGetScoreboard();
 
   const [image, setImage] = useState<boolean>(false);
 
   return (
-    <AdminLayout title="Inicio">
+    <AdminLayout title="Inicio" roleId={roleId}>
       <div className="w-full flex justify-center ">
         {image === true ? (
           <div>
@@ -86,3 +90,30 @@ const Home = ({ teams }) => {
 };
 
 export default Home;
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+import { GetServerSideProps } from "next";
+import { prisma } from "@/database";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = (await getServerSession(
+    ctx.req,
+    ctx.res,
+    authOptions
+  )) as any;
+  console.log(session);
+  const user = await prisma.user.findFirst({
+    where: {
+      id: session.user.sub,
+    },
+  });
+
+  return {
+    props: {
+      roleId: user.roleId,
+    },
+  };
+};

@@ -1,4 +1,4 @@
-import { users } from "./data/users";
+import { roles, users } from "./data/users";
 import { management } from "./data/managment";
 import { teamAsign, teamDetail, teams } from "./data/teams";
 import { PrismaClient } from "@prisma/client";
@@ -10,6 +10,9 @@ const main = async (): Promise<void> => {
   await prisma.$connect();
   await prisma.management.createMany({
     data: management,
+  });
+  await prisma.role.createMany({
+    data: roles
   });
   await prisma.user.createMany({
     data: users,

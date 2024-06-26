@@ -4,15 +4,21 @@ import { usersColumns } from "@/components/datatable/columns/UsersColumn";
 import { DataTable } from "@/components/datatable/Datatable";
 import { Loader } from "@/components/ui/Loader";
 import { useGetUsers } from "@/hooks/admin/useUser";
-import React from "react";
+import React, { FC } from "react";
 
-const ColaboradoresPage = () => {
+type Props = {
+  roleId?: number;
+};
+
+const ColaboradoresPage: FC<Props> = ({ roleId }) => {
   const { data, isLoading } = useGetUsers();
-  
+  const { data: management, isLoading: isLoadingManagment } = useGetManagement();
+
   return (
-    <AdminLayout title="Colaboradores">
+    <AdminLayout title="Colaboradores" roleId={roleId}>
+      <h1 className="text-center text-2xl font-bold mt-4">Embajadores</h1>
       <div className="flex justify-end">
-        <CreateUser />
+        {isLoadingManagment ? <Loader /> : <CreateUser management={management} />}
       </div>
       {isLoading ? (
         <Loader />
@@ -24,3 +30,29 @@ const ColaboradoresPage = () => {
 };
 
 export default ColaboradoresPage;
+
+import { GetServerSideProps } from "next";
+import { prisma } from "@/database";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
+import { useGetManagement } from "@/hooks/admin/useManagment";
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = (await getServerSession(
+    ctx.req,
+    ctx.res,
+    authOptions
+  )) as any;
+  console.log(session);
+  const user = await prisma.user.findFirst({
+    where: {
+      id: session.user.sub,
+    },
+  });
+
+  return {
+    props: {
+      roleId: user.roleId,
+    },
+  };
+};

@@ -5,20 +5,49 @@ import { DataTable } from "@/components/datatable/Datatable";
 import { Loader } from "@/components/ui/Loader";
 import { useGetTeams } from "@/hooks";
 
-export default function TeamsPage() {
+type Props = {
+  roleId?: number;
+};
+
+const TeamsPage: FC<Props> = ({ roleId }) => {
   const { data, isLoading } = useGetTeams();
 
   return (
-    <AdminLayout title="Prueba">
+    <AdminLayout title="Equipos" roleId={roleId}>
+      <h1 className="text-center text-2xl font-bold mt-4">Equipos</h1>
       <div className="flex justify-end">
         <CreateTeam />
       </div>
 
-      {isLoading ? (
-        <Loader/>
-      ) : (
-        <DataTable columns={teamColumns} data={data} />
-      )}
+      {isLoading ? <Loader /> : <DataTable columns={teamColumns} data={data} />}
     </AdminLayout>
   );
-}
+};
+
+export default TeamsPage;
+
+import { GetServerSideProps } from "next";
+import { prisma } from "@/database";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
+import { FC } from "react";
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = (await getServerSession(
+    ctx.req,
+    ctx.res,
+    authOptions
+  )) as any;
+  console.log(session);
+  const user = await prisma.user.findFirst({
+    where: {
+      id: session.user.sub,
+    },
+  });
+
+  return {
+    props: {
+      roleId: user.roleId,
+    },
+  };
+};

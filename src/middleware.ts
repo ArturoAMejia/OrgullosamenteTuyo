@@ -10,6 +10,7 @@ export default withAuth(
 
     // if (req.nextUrl.pathname.startsWith("/auth/login") && req.nextauth.token)
     //   return NextResponse.rewrite(new URL("/", req.url));
+    
   },
   {
     callbacks: {

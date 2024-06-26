@@ -9,11 +9,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import {
   CircleUserIcon,
+  MapPinIcon,
   MenuIcon,
   Package2Icon,
+  StickyNoteIcon,
+  TrophyIcon,
   UsersIcon,
 } from "lucide-react";
 import { FC } from "react";
@@ -24,9 +27,10 @@ import Image from "next/image";
 interface Props {
   title: string;
   children: React.ReactNode;
+  roleId?: number;
 }
 
-export const AdminLayout: FC<Props> = ({ title, children }) => {
+export const AdminLayout: FC<Props> = ({ title, children, roleId }) => {
   return (
     <>
       <Head>
@@ -51,39 +55,6 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
             </div>
             <div className="flex-1">
               <nav className="grid items-start px-2 text-sm font-medium lg:px-4 bg-[#046A38]">
-                {/* <Link
-                  href="/puntuacion"
-                  className="flex items-center text-white font-bold gap-3 rounded-lg bg-[#00B5EB] px-3 py-2  transition-all "
-                  prefetch={false}
-                >
-                  <TrophyIcon className="h-4 w-4" />
-                  Tabla de puntuación
-                </Link>
-                <Link
-                  href="/equipos"
-                  className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
-                  prefetch={false}
-                >
-                  <UsersIcon className="h-4 w-4" />
-                  Equipos
-                </Link>
-                <Link
-                  href="/estaciones"
-                  className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
-                  prefetch={false}
-                >
-                  <MapPinIcon className="h-4 w-4" />
-                  Estaciones
-                </Link>
-
-                <Link
-                  href="/colaboradores"
-                  className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
-                  prefetch={false}
-                >
-                  <UsersIcon className="h-4 w-4" />
-                  Colaboradores
-                </Link> */}
                 <Link
                   href="/"
                   className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
@@ -92,14 +63,43 @@ export const AdminLayout: FC<Props> = ({ title, children }) => {
                   <UsersIcon className="h-4 w-4" />
                   Inicio
                 </Link>
-                {/* <Link
-                  href="/respuestas-cuestionario"
-                  className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
-                  prefetch={false}
-                >
-                  <StickyNoteIcon className="h-4 w-4" />
-                  Respuestas de cuestionario
-                </Link> */}
+                {roleId === 1 && (
+                  <>
+                    <Link
+                      href="/equipos"
+                      className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
+                      prefetch={false}
+                    >
+                      <UsersIcon className="h-4 w-4" />
+                      Equipos
+                    </Link>
+                    <Link
+                      href="/estaciones"
+                      className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
+                      prefetch={false}
+                    >
+                      <MapPinIcon className="h-4 w-4" />
+                      Estaciones
+                    </Link>
+
+                    <Link
+                      href="/colaboradores"
+                      className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
+                      prefetch={false}
+                    >
+                      <UsersIcon className="h-4 w-4" />
+                      Colaboradores
+                    </Link>
+                    <Link
+                      href="/respuestas-cuestionario"
+                      className="flex items-center text-black font-bold gap-3 rounded-lg px-3 py-2 transition-all "
+                      prefetch={false}
+                    >
+                      <StickyNoteIcon className="h-4 w-4" />
+                      Respuestas de cuestionario
+                    </Link>
+                  </>
+                )}
               </nav>
             </div>
           </div>
