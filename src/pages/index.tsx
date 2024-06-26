@@ -71,7 +71,6 @@ const Home: FC<Props> = ({ roleId = 2 }) => {
                 <div className="flex justify-center my-6">
                   <ShowAvailableStations
                     stationsTeam={data.availableStations}
-                    test={data.stationsFinal}
                   />
                 </div>
               )}
@@ -104,7 +103,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     ctx.res,
     authOptions
   )) as any;
-  console.log(session);
   const user = await prisma.user.findFirst({
     where: {
       id: session.user.sub,

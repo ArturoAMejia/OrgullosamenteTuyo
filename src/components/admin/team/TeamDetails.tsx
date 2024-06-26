@@ -45,7 +45,7 @@ export const TeamDetails: FC<Props> = ({ team }) => {
                   className="flex items-center gap-4"
                 >
                   <Avatar>
-                    <AvatarImage src="/placeholder-user.jpg" />
+                    {/* <AvatarImage src="/placeholder-user.jpg" /> */}
                     <AvatarFallback>
                       {member.user.name.split(" ")[0][0].toUpperCase()}
                       {member.user.name.split(" ")[1] &&

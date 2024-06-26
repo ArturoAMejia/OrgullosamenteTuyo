@@ -25,7 +25,7 @@ export const usersColumns: ColumnDef<IUser>[] = [
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor<"username", string>("username", {
-    header: "Usario",
+    header: "Usuario",
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor<"TeamDetail", TeamDetail>("TeamDetail", {

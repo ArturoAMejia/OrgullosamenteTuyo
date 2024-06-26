@@ -14,11 +14,9 @@ import { FC } from "react";
 
 type Props = {
   stationsTeam: any[];
-  test: any[];
 };
 
-export const ShowAvailableStations: FC<Props> = ({ stationsTeam, test }) => {
-  console.log(test);
+export const ShowAvailableStations: FC<Props> = ({ stationsTeam }) => {
   return (
     <Dialog>
       <DialogTrigger

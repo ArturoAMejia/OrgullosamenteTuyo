@@ -61,6 +61,11 @@ const getTeams = async (req: NextApiRequest, res: NextApiResponse) => {
 const createTeam = async (req: NextApiRequest, res: NextApiResponse) => {
   const { name } = req.body;
 
+  if (name === "")
+    return res
+      .status(400)
+      .json({ message: "El nombre del equipo es requerido" });
+
   await prisma.$connect();
 
   const t = await prisma.team.findFirst({
@@ -85,6 +90,11 @@ const createTeam = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const editTeam = async (req: NextApiRequest, res: NextApiResponse) => {
   const { team } = req.body;
+
+  if (team.name === "")
+    return res
+      .status(400)
+      .json({ message: "El nombre del equipo es requerido" });
 
   await prisma.$connect();
 

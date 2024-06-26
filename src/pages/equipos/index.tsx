@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     ctx.res,
     authOptions
   )) as any;
-  console.log(session);
+
   const user = await prisma.user.findFirst({
     where: {
       id: session.user.sub,
