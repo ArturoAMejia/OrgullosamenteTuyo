@@ -192,7 +192,11 @@ export const AdminLayout: FC<Props> = ({ title, children, roleId }) => {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Configuración</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href='/configuracion'>
+                  Configuración
+                  </Link>
+                  </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => signOut()}>
                   Cerrar sesión

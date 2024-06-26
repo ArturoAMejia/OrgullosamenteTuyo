@@ -74,3 +74,24 @@ export const useAsignTeam = () => {
     onSuccess: () => refetch(),
   });
 };
+
+const updateUserInfo = async (user: {
+  name?: string;
+  username?: string;
+  email?: string;
+  password?: string;
+}) => {
+  const { data } = await api.put(`/users/config`, user);
+  return data;
+};
+
+export const useUpdateUserInfo = () => {
+  return useMutation({
+    mutationFn: (user: {
+      name?: string;
+      username?: string;
+      email?: string;
+      password?: string;
+    }) => updateUserInfo(user),
+  });
+};
