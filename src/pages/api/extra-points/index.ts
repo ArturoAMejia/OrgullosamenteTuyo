@@ -1,5 +1,6 @@
 import { prisma } from "@/database";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getWeek } from "date-fns";
 
 type Data = {
   message: string;
@@ -26,7 +27,9 @@ const giveExtraPoints = async (
 
   const { userId, questionaryId } = formdata;
 
-  console.log(req.body);
+  const date = new Date();
+
+  const week = getWeek(date);
 
   await prisma.$connect();
 
@@ -50,6 +53,15 @@ const giveExtraPoints = async (
   await prisma.questionary.update({
     where: {
       id: questionaryId,
+    },
+    data: {
+      status: true,
+    },
+  });
+
+  await prisma.questionary.updateMany({
+    where: {
+      week,
     },
     data: {
       status: true,

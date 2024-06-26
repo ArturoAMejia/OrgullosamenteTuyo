@@ -37,6 +37,15 @@ const createQuestionaryResponse = async (
     return res.status(400).json({ message: "Error al mandar el formulario" });
   }
 
+  if (
+    questionaryResponse.question1 === "" ||
+    questionaryResponse.question2 === "" ||
+    questionaryResponse.question3 === ""
+  )
+    return res
+      .status(400)
+      .json({ message: "Por favor llena todos los campos" });
+
   await prisma.$connect();
 
   const date = new Date();
@@ -69,11 +78,27 @@ const getQuestionaryResponse = async (
 
   const questionary = await prisma.questionary.findMany({
     select: {
-      user: true,
+      user: {
+        select: {
+          name: true,
+          id: true,
+          TeamDetail: {
+            select: {
+              team: {
+                select: {
+                  name: true,
+                  id: true,
+                },
+              },
+            },
+          },
+        },
+      },
       id: true,
       question1: true,
       question2: true,
       question3: true,
+      createdAt: true,
     },
     where: {
       week: week,

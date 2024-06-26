@@ -42,7 +42,9 @@ const createExtraPoints = async (formdata) => {
 };
 
 export const useCreateExtraPoints = () => {
+  const { refetch } = useGetQuestionaryResponse();
   return useMutation({
     mutationFn: createExtraPoints,
+    onSuccess: () => refetch(),
   });
 };
