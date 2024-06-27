@@ -435,7 +435,7 @@ export const InspectionForm = () => {
           <Button
             type="submit"
             className="w-full bg-[#F3B800] mt-4 font-bold"
-            disabled={formResponse.isPending ? true : false}
+            disabled={formResponse.isLoading ? true : false}
           >
             Enviar
           </Button>

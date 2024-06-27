@@ -9,6 +9,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 import React, { FC } from "react";
 
@@ -17,10 +18,11 @@ type Props = {
 };
 
 export const TeamDetails: FC<Props> = ({ team }) => {
-
   return (
     <AlertDialog>
-      <AlertDialogTrigger>Ver detalles</AlertDialogTrigger>
+      <AlertDialogTrigger>
+        <Button variant="link">Ver detalles</Button>
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Detalles del Equipo</AlertDialogTitle>
@@ -43,15 +45,16 @@ export const TeamDetails: FC<Props> = ({ team }) => {
                   className="flex items-center gap-4"
                 >
                   <Avatar>
-                    <AvatarImage src="/placeholder-user.jpg" />
+                    {/* <AvatarImage src="/placeholder-user.jpg" /> */}
                     <AvatarFallback>
                       {member.user.name.split(" ")[0][0].toUpperCase()}
-                      {member.user.name.split(" ")[1][0].toUpperCase()}
+                      {member.user.name.split(" ")[1] &&
+                        member.user.name.split(" ")[1][0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div>
                     {/* <p className="font-medium">{member.name}</p> */}
-                    {member.user.name }
+                    {member.user.name}
                   </div>
                 </div>
               ))}

@@ -11,6 +11,7 @@ export const oAuthUser = async (user: any, account: any, token: any) => {
       name: true,
       image: true,
       username: true,
+      roleId: true,
     },
   });
 
@@ -36,7 +37,7 @@ export const oAuthUser = async (user: any, account: any, token: any) => {
 
     await prisma.$disconnect();
 
-    return user;
+    return u;
   }
 };
 
@@ -44,7 +45,7 @@ export const checkUserEmailPassword = async (
   username: string,
   password: string
 ) => {
-  console.log(username, password)
+  console.log(username, password);
   await prisma.$connect();
 
   const u = await prisma.user.findFirst({
@@ -64,14 +65,19 @@ export const checkUserEmailPassword = async (
   if (!bcrypt.compareSync(password, u.password || "")) {
     return null;
   }
-  console.log(bcrypt.compareSync(password, u.password || ""))
+  console.log(bcrypt.compareSync(password, u.password || ""));
 
-  const { image, name, id } = u;
+  const { image, name, id, roleId } = u;
+
+  console.log("-------------------");
+  console.log(u);
+  console.log("-------------------");
 
   return {
     image,
     name,
     id,
     username,
+    roleId,
   };
 };

@@ -1,4 +1,3 @@
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import * as z from "zod";
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { useResetPassword } from "@/hooks/useAuth";
 import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/router";
 
 const resetSchema = z.object({
   email: z.string(),
@@ -22,12 +22,16 @@ type FormData = z.infer<typeof resetSchema>;
 
 const ResetPasswordPage = () => {
   const form = useForm<FormData>();
+  const router = useRouter();
 
   const resetPassword = useResetPassword();
   const onResetPassword = async (data: FormData) => {
     try {
       await resetPassword.mutateAsync(data.email);
       toast.success("Correo enviado, revisa tu bandeja de entrada");
+      setTimeout(() => {
+        router.push("/login");
+      }, 3000);
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -67,7 +71,7 @@ const ResetPasswordPage = () => {
           <Button
             type="submit"
             className="w-full"
-            disabled={resetPassword.isPending ? true : false}
+            disabled={resetPassword.isLoading ? true : false}
           >
             Solicitar cambio de contraseña
           </Button>

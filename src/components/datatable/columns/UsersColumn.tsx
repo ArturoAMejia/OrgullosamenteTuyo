@@ -1,6 +1,7 @@
 import { AsignTeam } from "@/components/admin/team/AsignTeam";
 import { EditUser } from "@/components/admin/user/EditUser";
 import { Badge } from "@/components/ui/badge";
+import { useGetManagement } from "@/hooks/admin/useManagment";
 import { TeamDetail, User } from "@prisma/client";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 
@@ -24,14 +25,30 @@ export const usersColumns: ColumnDef<IUser>[] = [
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor<"username", string>("username", {
-    header: "Usario",
+    header: "Usuario",
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor<"TeamDetail", TeamDetail>("TeamDetail", {
     header: "Equipo Asignado",
     cell: (info) =>
       info.getValue()[0]?.team !== undefined ? (
-        <Badge variant="outline">{info.getValue()[0]?.team?.name}</Badge>
+        <Badge
+          className={`text-white font-bold text-md ${
+            info.getValue()[0]?.team.id === 1
+              ? "bg-green-600"
+              : info.getValue()[0]?.team.id === 2
+              ? "bg-amber-400"
+              : info.getValue()[0]?.team.id === 3
+              ? "bg-red-500"
+              : info.getValue()[0]?.team.id === 4
+              ? "bg-slate-600"
+              : info.getValue()[0]?.team.id === 5
+              ? "bg-blue-700 "
+              : ""
+          }`}
+        >
+          {info.getValue()[0]?.team?.name}
+        </Badge>
       ) : (
         <AsignTeam user={info.row.original} />
       ),

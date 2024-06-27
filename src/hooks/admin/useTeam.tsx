@@ -1,5 +1,4 @@
 import api from "@/api/api";
-import { queryClient } from "@/util/queryClient";
 import { Team } from "@prisma/client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -29,22 +28,16 @@ export const useGetTeams = () => {
 
 export const useCreateTeam = () => {
   const { refetch } = useGetTeams();
-  refetch();
   return useMutation({
     mutationFn: (name: string) => createTeam(name),
-    onSuccess: (data) => {
-      queryClient.setQueryData(["teams", { id: data.id }], data);
-    },
+    onSuccess: () => refetch(),
   });
 };
 
 export const useEditTeam = () => {
   const { refetch } = useGetTeams();
-  refetch();
   return useMutation({
     mutationFn: (team: Team) => editTeam(team),
-    onSuccess: (data) => {
-      queryClient.setQueryData(["teams", { id: data.id }], data);
-    },
+    onSuccess: () => refetch(),
   });
 };

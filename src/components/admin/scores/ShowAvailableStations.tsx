@@ -14,11 +14,9 @@ import { FC } from "react";
 
 type Props = {
   stationsTeam: any[];
-  test: any[];
 };
 
-export const ShowAvailableStations: FC<Props> = ({ stationsTeam, test }) => {
-  console.log(test);
+export const ShowAvailableStations: FC<Props> = ({ stationsTeam }) => {
   return (
     <Dialog>
       <DialogTrigger
@@ -61,30 +59,6 @@ export const ShowAvailableStations: FC<Props> = ({ stationsTeam, test }) => {
                   </div>
                 ))
               )}
-              {/* {test.map((station) => (
-                <div
-                  key={station.id}
-                  className="flex justify-center  text-white font-bold"
-                >
-                  <Badge
-                    className={`text-white font-bold text-md ${
-                      station.teamId === 1
-                        ? "bg-green-600"
-                        : station.teamId === 2
-                        ? "bg-amber-400"
-                        : station.teamId === 3
-                        ? "bg-red-500"
-                        : station.teamId === 4
-                        ? "bg-slate-600"
-                        : station.teamId === 5
-                        ? "bg-blue-700 "
-                        : ""
-                    }`}
-                  >
-                    <p>{station.name.split(" ")[1]}</p>
-                  </Badge>
-                </div>
-              ))} */}
             </div>
           </DialogDescription>
         </DialogHeader>

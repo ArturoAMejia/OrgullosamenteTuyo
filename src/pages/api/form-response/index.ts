@@ -42,11 +42,40 @@ const createFormResponse = async (
 ) => {
   const { formResponse } = req.body;
 
-
   if (formResponse.stationId === "")
     return res
       .status(400)
       .json({ message: "El número de estación es requerido" });
+
+  if (formResponse.labeledItems === "")
+    return res.status(400).json({ message: "Seleccione una de las opciones" });
+
+  if (formResponse.separateItems === "")
+    return res.status(400).json({ message: "Seleccione una de las opciones" });
+
+  if (
+    formResponse.nonLabeledItems.length === 0 &&
+    formResponse.labeledItems === "false"
+  )
+    return res.status(400).json({ message: "Seleccione al menos un elemento" });
+
+  if (
+    formResponse.nonSeparateItems.length === 0 &&
+    formResponse.separateItems === "false"
+  )
+    return res.status(400).json({ message: "Seleccione al menos un elemento" });
+
+  if (
+    formResponse.solutionNonLabeledItems === "" &&
+    formResponse.labeledItems === "false"
+  )
+    return res.status(400).json({ message: "Ingrese una solución" });
+
+  if (
+    formResponse.solutionNonSeparateItems === "" &&
+    formResponse.separateItems === "false"
+  )
+    return res.status(400).json({ message: "Ingrese una solución" });
 
   await prisma.$connect();
 

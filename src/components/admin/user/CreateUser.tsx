@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -18,10 +17,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+} from "@/components/ui/select";
 import { useCreateUser } from "@/hooks/admin/useUser";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Management } from "@prisma/client";
+import { FC } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
@@ -30,19 +38,24 @@ const UserSchema = z.object({
   first_name: z.string(),
   lastname: z.string(),
   email: z.string().email({ message: "Correo inválido" }),
+  managementId: z.string(),
 });
 
 type FormDataType = z.infer<typeof UserSchema>;
 
-export const CreateUser = () => {
+type Props = {
+  management: Management[];
+};
+
+export const CreateUser: FC<Props> = ({ management }) => {
   const createUserMutation = useCreateUser();
   const form = useForm<FormDataType>({
     resolver: zodResolver(UserSchema),
-    mode: "onChange",
     defaultValues: {
       first_name: "",
       lastname: "",
       email: "",
+      managementId: "1",
     },
   });
 
@@ -84,7 +97,7 @@ export const CreateUser = () => {
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
               control={form.control}
               name="lastname"
               render={({ field }) => (
@@ -97,7 +110,7 @@ export const CreateUser = () => {
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
@@ -106,6 +119,39 @@ export const CreateUser = () => {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="managementId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Gerencia</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona la gerencia" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
+                        {management.map((option) => (
+                          <SelectItem
+                            key={option.id}
+                            value={option.id.toString()}
+                          >
+                            {option.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+
                   <FormMessage />
                 </FormItem>
               )}

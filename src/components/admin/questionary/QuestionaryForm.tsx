@@ -118,7 +118,7 @@ export const QuestionaryForm = () => {
           <Button
             type="submit"
             className="w-full bg-[#F3B800] mt-4 font-bold"
-            disabled={createQuestionaryRes.isPending ? true : false}
+            disabled={createQuestionaryRes.isLoading ? true : false}
           >
             Enviar respuesta
           </Button>

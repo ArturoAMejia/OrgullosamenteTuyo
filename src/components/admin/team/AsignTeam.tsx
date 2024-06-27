@@ -92,7 +92,7 @@ export const AsignTeam: FC<Props> = ({ user }) => {
                 name="teamId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Equipo</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
