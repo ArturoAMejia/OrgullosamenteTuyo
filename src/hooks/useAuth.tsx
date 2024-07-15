@@ -37,3 +37,24 @@ export const useResetPasswordToken = () => {
       resetPasswordToken(data.token, data.password),
   });
 };
+
+const resetPasswordAdmin = async (id: string, newPassword: string) => {
+  const { data } = await api.post(`/auth/reset-password/${id}`, { newPassword });
+  return data;
+}
+
+export const useResetPasswordAdmin = () => {
+  return useMutation({
+    mutationFn: (data: { id: string; newPassword: string }) =>
+      resetPasswordAdmin(data.id, data.newPassword),
+  });
+}
+
+const confirmAccount = async (email: string) => {
+  const { data } = await api.post("/auth/confirm-account", { email });
+  return data;
+}
+
+export const useConfirmAccount = () => {
+  return useMutation({ mutationFn: (token: string) => confirmAccount(token) });
+}

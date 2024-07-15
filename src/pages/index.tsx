@@ -11,15 +11,16 @@ import { FC, useState } from "react";
 
 type Props = {
   roleId?: number;
+  emailVerified?: Date | null;
 };
 
-const Home: FC<Props> = ({ roleId = 2 }) => {
+const Home: FC<Props> = ({ roleId = 2, emailVerified }) => {
   const { data, isLoading } = useGetScoreboard();
 
   const [image, setImage] = useState<boolean>(false);
 
   return (
-    <AdminLayout title="Inicio" roleId={roleId}>
+    <AdminLayout title="Inicio" roleId={roleId} emailVerified={emailVerified}>
       <div className="w-full flex justify-center ">
         {image === true ? (
           <div>
@@ -112,6 +113,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       roleId: user.roleId,
+      emailVerified: JSON.parse(JSON.stringify(user.emailVerified)),
     },
   };
 };

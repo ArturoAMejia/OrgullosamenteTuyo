@@ -79,7 +79,7 @@ const ConfigurationPage: FC<Props> = ({ user }) => {
   };
 
   return (
-    <AdminLayout title="Configuración">
+    <AdminLayout title="Configuración" roleId={user.roleId} emailVerified={user.emailVerified}>
       <div className="flex justify-end">
         <div className="container px-4 md:px-6 py-8">
           <h1 className="text-3xl font-bold mb-6">

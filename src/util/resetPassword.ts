@@ -18,3 +18,19 @@ export const sendResetPasswordEmail = async (
     <p>Si no solicitaste restaurar tu contraseña ignora este mensaje</p>`,
   });
 };
+
+export const sendNotificationResetPassword = async (
+  email: string,
+  nombre: string
+) => {
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
+  await resend.emails.send({
+    from: "admin@embajadores-ambientales.com",
+    to: email,
+    subject: "Embajadores Ambientales - Resturación de contraseña",
+    html: `
+    <p>Hola ${nombre}, su contraseña ha sido restaurada correctamente</p>
+    `,
+  });
+};

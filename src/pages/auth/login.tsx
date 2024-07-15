@@ -14,7 +14,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { Layout } from "@/components/admin/Layout";
 import Image from "next/image";
-import { CircleUserRoundIcon, UserIcon, UserRoundIcon } from "lucide-react";
+import { CircleUserRoundIcon } from "lucide-react";
+import Link from "next/link";
 
 const loginSchema = z.object({
   username: z.string(),
@@ -94,8 +95,17 @@ const Login = () => {
                 )}
               />
             </div>
+            <div className="text-right">
+              <Button
+                type="button"
+                variant="link"
+                className="text-[#046A38] hover:text-[#046A38] hover:underline"
+              >
+                <Link href="/restaurar">Olvidé mi contraseña</Link>
+              </Button>
+            </div>
 
-            <Button type="submit" className="w-full bg-[#046A38] mt-4">
+            <Button type="submit" className="w-full bg-[#046A38]">
               Iniciar sesión
             </Button>
           </form>

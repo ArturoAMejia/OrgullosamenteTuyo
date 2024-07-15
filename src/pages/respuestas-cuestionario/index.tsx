@@ -4,13 +4,18 @@ import { Loader } from "../../components/ui/Loader";
 import { useGetQuestionaryResponse } from "../../hooks/admin/useFormResponse";
 
 type Props = {
+  emailVerified?: Date | null;
   roleId?: number;
 };
 
-const QuestionaryResponsePage: FC<Props> = ({ roleId }) => {
+const QuestionaryResponsePage: FC<Props> = ({ roleId, emailVerified }) => {
   const { data, isLoading } = useGetQuestionaryResponse();
   return (
-    <AdminLayout title="Respuestas de Cuestionario" roleId={roleId}>
+    <AdminLayout
+      title="Respuestas de Cuestionario"
+      roleId={roleId}
+      emailVerified={emailVerified}
+    >
       <div className="flex justify-center">
         <h1 className="text-2xl font-bold">Respuestas de Cuestionario</h1>
       </div>
@@ -40,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     ctx.res,
     authOptions
   )) as any;
-  
+
   const user = await prisma.user.findFirst({
     where: {
       id: session.user.sub,
@@ -50,6 +55,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       roleId: user.roleId,
+      emailVerified: JSON.parse(JSON.stringify(user.emailVerified)),
     },
   };
 };

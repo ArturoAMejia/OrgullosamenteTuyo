@@ -10,9 +10,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useResetPassword } from "@/hooks/useAuth";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
+import { useConfirmAccount } from "@/hooks/useAuth";
 
 const resetSchema = z.object({
   email: z.string(),
@@ -20,17 +20,17 @@ const resetSchema = z.object({
 
 type FormData = z.infer<typeof resetSchema>;
 
-const ResetPasswordPage = () => {
+const ConfirmAccountPage = () => {
   const form = useForm<FormData>();
   const router = useRouter();
 
-  const resetPassword = useResetPassword();
-  const onResetPassword = async (data: FormData) => {
+  const confirmAccountPage = useConfirmAccount();
+  const onConfirmAccountPage = async (data: FormData) => {
     try {
-      await resetPassword.mutateAsync(data.email);
+      await confirmAccountPage.mutateAsync(data.email);
       toast.success("Correo enviado, revisa tu bandeja de entrada");
       setTimeout(() => {
-        router.push("/auth/login");
+        router.push("/");
       }, 3000);
     } catch (error) {
       toast.error(error.response.data.message);
@@ -40,10 +40,10 @@ const ResetPasswordPage = () => {
   return (
     <div className="mx-auto max-w-md space-y-6 py-12">
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Restablecer contraseña</h1>
+        <h1 className="text-3xl font-bold">Confirma tu cuenta</h1>
         <p className="text-muted-foreground">
-          Ingresa tu correo electrónico enlazado a tu cuenta para restablecer tu
-          contraseña
+          Ingresa tu correo electrónico enlazado a tu cuenta para confirmar tu
+          cuenta
         </p>
       </div>
       <Toaster position="top-right" reverseOrder={false} />
@@ -51,7 +51,7 @@ const ResetPasswordPage = () => {
       <Form {...form}>
         <form
           className="space-y-4"
-          onSubmit={form.handleSubmit(onResetPassword)}
+          onSubmit={form.handleSubmit(onConfirmAccountPage)}
         >
           <div className="space-y-2">
             <FormField
@@ -71,9 +71,9 @@ const ResetPasswordPage = () => {
           <Button
             type="submit"
             className="w-full"
-            disabled={resetPassword.isLoading ? true : false}
+            disabled={confirmAccountPage.isLoading ? true : false}
           >
-            Solicitar cambio de contraseña
+            Mandar correo de confirmación
           </Button>
         </form>
       </Form>
@@ -81,4 +81,39 @@ const ResetPasswordPage = () => {
   );
 };
 
-export default ResetPasswordPage;
+export default ConfirmAccountPage;
+
+import { GetServerSideProps } from "next";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
+import { prisma } from "@/database";
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = (await getServerSession(
+    ctx.req,
+    ctx.res,
+    authOptions
+  )) as any;
+
+  await prisma.$connect();
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.sub,
+    },
+  });
+
+  if (user.emailVerified !== null) {
+    await prisma.$disconnect();
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

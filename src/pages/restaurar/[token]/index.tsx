@@ -11,8 +11,24 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 const resetSchema = z.object({
-  email: z.string(),
+  password: z
+    .string()
+    .min(8, { message: "La contraseña debe de ser de al menos 8 caracteres" })
+    .max(20, { message: "La contraseña debe de ser de máximo 20 caracteres" })
+    .refine((password) => /[A-Z]/.test(password), {
+      message: "La contraseña debe de tener al menos una mayúscula",
+    })
+    .refine((password) => /[a-z]/.test(password), {
+      message: "La contraseña debe de tener al menos una minúscula",
+    })
+    .refine((password) => /[0-9]/.test(password), {
+      message: "La contraseña debe de tener al menos un número",
+    })
+    .refine((password) => /[!@#$%^&*]/.test(password), {
+      message: "La contraseña debe de tener al menos un caracter especial",
+    }),
 });
 
 type FormData = z.infer<typeof resetSchema>;
@@ -23,13 +39,18 @@ type Props = {
 
 const ResetPasswordPageToken: FC<Props> = ({ token }) => {
   const resetPassword = useResetPasswordToken();
-  const form = useForm<FormData>();
-  const router = useRouter()
+  const form = useForm<FormData>({
+    resolver: zodResolver(resetSchema),
+    mode: "onChange",
+    defaultValues: {
+      password: "",
+    },
+  });
+  const router = useRouter();
 
   const onResetPassword = async (data: FormData) => {
-
     try {
-      await resetPassword.mutateAsync({ token, password: data.email });
+      await resetPassword.mutateAsync({ token, password: data.password });
       toast.success("Contraseña restablecida correctamente");
 
       setTimeout(() => {
@@ -59,7 +80,7 @@ const ResetPasswordPageToken: FC<Props> = ({ token }) => {
             <div className="space-y-2">
               <FormField
                 control={form.control}
-                name="email"
+                name="password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nueva Contraseña</FormLabel>
@@ -93,6 +114,7 @@ import { FC } from "react";
 import { useResetPasswordToken } from "@/hooks/useAuth";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { token } = ctx.params;

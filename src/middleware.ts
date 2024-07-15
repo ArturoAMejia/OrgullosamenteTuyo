@@ -20,5 +20,10 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/"],
+  matcher: ["/", 
+    "/colaboradores",
+    "/configuracion",
+    "/equipos",
+    "/respuestas-cuestionario",
+  ],
 };

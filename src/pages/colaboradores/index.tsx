@@ -8,17 +8,27 @@ import React, { FC } from "react";
 
 type Props = {
   roleId?: number;
+  emailVerified?: Date | null;
 };
 
-const ColaboradoresPage: FC<Props> = ({ roleId }) => {
+const ColaboradoresPage: FC<Props> = ({ roleId, emailVerified }) => {
   const { data, isLoading } = useGetUsers();
-  const { data: management, isLoading: isLoadingManagment } = useGetManagement();
+  const { data: management, isLoading: isLoadingManagment } =
+    useGetManagement();
 
   return (
-    <AdminLayout title="Colaboradores" roleId={roleId}>
+    <AdminLayout
+      title="Colaboradores"
+      roleId={roleId}
+      emailVerified={emailVerified}
+    >
       <h1 className="text-center text-2xl font-bold mt-4">Embajadores</h1>
       <div className="flex justify-end">
-        {isLoadingManagment ? <Loader /> : <CreateUser management={management} />}
+        {isLoadingManagment ? (
+          <Loader />
+        ) : (
+          <CreateUser management={management} />
+        )}
       </div>
       {isLoading ? (
         <Loader />
@@ -53,6 +63,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       roleId: user.roleId,
+      emailVerified: JSON.parse(JSON.stringify(user.emailVerified)),
     },
   };
 };
