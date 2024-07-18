@@ -37,6 +37,7 @@ model User {
   roleId        Int
   role          Role            @relation(fields: [roleId], references: [id])
   points        Int             @default(0)
+  twoFA         Boolean         @default(false)
   accounts      Account[]
   sessions      Session[]
   // Optional for WebAuthn support
@@ -44,8 +45,6 @@ model User {
 
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @updatedAt
-  Team                Team?                 @relation(fields: [teamId], references: [id])
-  teamId              Int?
   FormResponse        FormResponse[]
   TeamDetail          TeamDetail[]
   ResetPasswordToken  ResetPasswordToken[]
@@ -53,6 +52,7 @@ model User {
   Questionary         Questionary[]
   PasswordHistory     PasswordHistory[]
   ConfirmAccountToken ConfirmAccountToken[]
+  OTP                 OTP[]
 }
 
 model ConfirmAccountToken {
@@ -61,6 +61,16 @@ model ConfirmAccountToken {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expires   Boolean  @default(false)
   createdAt DateTime @default(now())
+}
+
+model OTP {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  otp       Int
+  expires   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model PasswordHistory {
@@ -142,7 +152,6 @@ model Team {
   updatedAt    DateTime       @updatedAt
   PointPerWeek PointPerWeek[]
   TeamDetail   TeamDetail[]
-  User         User[]
 }
 
 model TeamDetail {

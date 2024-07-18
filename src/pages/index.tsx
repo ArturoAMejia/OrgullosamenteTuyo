@@ -97,6 +97,7 @@ import { GetServerSideProps } from "next";
 import { prisma } from "@/database";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
+import { useSession } from "next-auth/react";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = (await getServerSession(

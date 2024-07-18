@@ -72,6 +72,7 @@ const confirmAccount = async (
     },
     data: {
       emailVerified: new Date(Date.now()),
+      twoFA: true,
     },
   });
 
