@@ -23,20 +23,28 @@ import { FC } from "react";
 import { Toaster } from "react-hot-toast";
 import Head from "next/head";
 import Image from "next/image";
+import { AlertBadge } from "../ui/AlertBadge";
 
 interface Props {
   title: string;
   children: React.ReactNode;
   roleId?: number;
+  emailVerified?: Date | null;
 }
 
-export const AdminLayout: FC<Props> = ({ title, children, roleId }) => {
+export const AdminLayout: FC<Props> = ({
+  title,
+  children,
+  roleId,
+  emailVerified,
+}) => {
   return (
     <>
       <Head>
         <link rel="shortcut icon" href="/img/logo.ico" type="image/x-icon" />
         <title>{title}</title>
       </Head>
+      {emailVerified === null && <AlertBadge />}
 
       <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <div className="hidden  md:block bg-[#046A38] text-black">

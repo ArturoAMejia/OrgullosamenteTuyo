@@ -7,13 +7,14 @@ import { useGetTeams } from "@/hooks";
 
 type Props = {
   roleId?: number;
+  emailVerified?: Date | null;
 };
 
-const TeamsPage: FC<Props> = ({ roleId }) => {
+const TeamsPage: FC<Props> = ({ roleId, emailVerified }) => {
   const { data, isLoading } = useGetTeams();
 
   return (
-    <AdminLayout title="Equipos" roleId={roleId}>
+    <AdminLayout title="Equipos" roleId={roleId} emailVerified={emailVerified}>
       <h1 className="text-center text-2xl font-bold mt-4">Equipos</h1>
       <div className="flex justify-end">
         <CreateTeam />
@@ -48,6 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       roleId: user.roleId,
+      emailVerified: JSON.parse(JSON.stringify(user.emailVerified)),
     },
   };
 };

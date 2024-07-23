@@ -1,5 +1,6 @@
 import { AsignTeam } from "@/components/admin/team/AsignTeam";
 import { EditUser } from "@/components/admin/user/EditUser";
+import { RestorePasswordUser } from "@/components/admin/user/RestorePassword";
 import { Badge } from "@/components/ui/badge";
 import { useGetManagement } from "@/hooks/admin/useManagment";
 import { TeamDetail, User } from "@prisma/client";
@@ -57,8 +58,9 @@ export const usersColumns: ColumnDef<IUser>[] = [
     id: "actions",
     header: "Acciones",
     cell: (info) => (
-      <div className="flex justify-center">
+      <div className="flex justify-center gap-2">
         <EditUser user={info.row.original} />
+        <RestorePasswordUser user={info.row.original} />
       </div>
     ),
   }),

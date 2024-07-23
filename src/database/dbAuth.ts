@@ -41,11 +41,33 @@ export const oAuthUser = async (user: any, account: any, token: any) => {
   }
 };
 
+export const registerSession = async (user: any, token: any) => {
+  await prisma.$connect();
+
+  const u = await prisma.user.findFirst({
+    where: {
+      username: user.username,
+    },
+  });
+
+  if (!u) return null;
+
+  await prisma.session.create({
+    data: {
+      sessionToken: token.accessToken,
+      userId: u.id,
+      expires: new Date(token.expires),
+    },
+  });
+  await prisma.$disconnect();
+
+  return u;
+};
+
 export const checkUserEmailPassword = async (
   username: string,
   password: string
 ) => {
-  console.log(username, password);
   await prisma.$connect();
 
   const u = await prisma.user.findFirst({
@@ -53,8 +75,6 @@ export const checkUserEmailPassword = async (
       username,
     },
   });
-
-  console.log(`User from dbAuth ${u}`);
 
   await prisma.$disconnect();
 
@@ -65,19 +85,8 @@ export const checkUserEmailPassword = async (
   if (!bcrypt.compareSync(password, u.password || "")) {
     return null;
   }
-  console.log(bcrypt.compareSync(password, u.password || ""));
 
   const { image, name, id, roleId } = u;
 
-  console.log("-------------------");
-  console.log(u);
-  console.log("-------------------");
-
-  return {
-    image,
-    name,
-    id,
-    username,
-    roleId,
-  };
+  return u;
 };

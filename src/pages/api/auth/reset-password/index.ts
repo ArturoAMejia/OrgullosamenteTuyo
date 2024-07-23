@@ -24,7 +24,6 @@ export default function handler(
 
 const sentResetPassword = async (req: NextApiRequest, res: NextApiResponse) => {
   const { email } = req.body;
-  console.log(req.body)
 
   await prisma.$connect();
 
@@ -56,8 +55,6 @@ const sentResetPassword = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const resetPassword = async (req: NextApiRequest, res: NextApiResponse) => {
   const { token, password } = req.body;
-
-  console.log(req.body)
 
   await prisma.$connect();
 

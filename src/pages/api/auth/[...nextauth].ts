@@ -1,10 +1,17 @@
-import NextAuth, { NextAuthOptions, User } from "next-auth";
+import { User as UserPrisma } from "@prisma/client";
+import NextAuth, { NextAuthOptions, User, DefaultSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { checkUserEmailPassword, oAuthUser } from "@/database/dbAuth";
+import {
+  checkUserEmailPassword,
+  oAuthUser,
+  registerSession,
+} from "@/database/dbAuth";
 import { prisma } from "@/database/db";
+import bcrypt from "bcryptjs";
+import { AdapterUser } from "next-auth/adapters";
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -17,7 +24,6 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" } as any,
       },
       async authorize({ username, password }) {
-        // console.log({ email, password });
         return await checkUserEmailPassword(username, password);
       },
     }),

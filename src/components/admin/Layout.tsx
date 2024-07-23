@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import Head from "next/head";
+import { Toaster } from "react-hot-toast";
 
 type Props = {
   children: React.ReactNode;
@@ -19,6 +20,8 @@ export const Layout: FC<Props> = ({ children, title }) => {
         <main className="h-screen flex flex-col gap-8 justify-center items-center">
           {children}
         </main>
+        <Toaster position="top-right" reverseOrder={false} />
+
         <footer className="bg-[#42882B] w-full h-20"></footer>
       </div>
     </>

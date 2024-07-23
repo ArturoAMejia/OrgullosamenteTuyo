@@ -29,6 +29,7 @@ import { User } from "@prisma/client";
 import toast from "react-hot-toast";
 import { useUpdateUserInfo } from "@/hooks";
 import { useRouter } from "next/router";
+import { Badge } from "@/components/ui/badge";
 
 const resetSchema = z.object({
   email: z.string().email(),
@@ -79,7 +80,11 @@ const ConfigurationPage: FC<Props> = ({ user }) => {
   };
 
   return (
-    <AdminLayout title="Configuración">
+    <AdminLayout
+      title="Configuración"
+      roleId={user.roleId}
+      emailVerified={user.emailVerified}
+    >
       <div className="flex justify-end">
         <div className="container px-4 md:px-6 py-8">
           <h1 className="text-3xl font-bold mb-6">
@@ -175,6 +180,11 @@ const ConfigurationPage: FC<Props> = ({ user }) => {
                         </FormItem>
                       )}
                     />
+
+                    <h3 className="font-bold text-lg">
+                      Factor de autenticación en dos pasos
+                    </h3>
+                    {user.twoFA ? "Activado" : "Desactivado"}
                   </CardContent>
                   <CardFooter>
                     <Button className="ml-auto" type="submit">

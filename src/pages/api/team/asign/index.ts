@@ -22,8 +22,6 @@ export default function handler(
 const asignUserTeam = async (req: NextApiRequest, res: NextApiResponse) => {
   const { userId, teamId } = req.body;
 
-  console.log(req.body);
-
   await prisma.$connect();
 
   const user = await prisma.user.findUnique({
